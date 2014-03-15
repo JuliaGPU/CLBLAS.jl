@@ -1,4 +1,3 @@
-clBLAS.jl
-=========
+# clBLAS
 
-clBLAS integration for Julia
+[![Build Status](https://travis-ci.org/ekobir/clBLAS.jl.png)](https://travis-ci.org/ekobir/clBLAS.jl)
