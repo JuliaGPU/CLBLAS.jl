@@ -1,5 +1,6 @@
 import clBLAS
-
+import OpenCL    
+    const clblas = clBLAS
     clblas.setup()
     const cl = OpenCL
 
@@ -24,13 +25,13 @@ import clBLAS
 
     event = clblas.clblasSscal(N, alpha1, X.id, offx, incx, [queue])
 
-    local event2 = cl.UserEvent(ctx, retain=true)
-    local ptrEvent2 = [event2.id]
+    event2 = cl.UserEvent(ctx, retain=true)
+    ptrEvent2 = [event2.id]
     clblas.clblasSscal(N, alpha2, X.id, offx, incx, ncq, [clq], cl.cl_uint(1), event, ptrEvent2)
 
     cl.api.clWaitForEvents(cl.cl_uint(1), ptrEvent2)
 
-    local result = Array(Float32, length(X))
+    result = Array(Float32, length(X))
     cl.enqueue_read_buffer(queue, X, result, unsigned(0), nothing, true)
 
     expected = data * alpha1 * alpha2

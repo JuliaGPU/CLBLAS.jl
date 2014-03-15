@@ -1,8 +1,10 @@
 import clBLAS
+import OpenCL
 
+    const clblas = clBLAS
     clblas.setup()
     const cl = OpenCL
-    alpha::Float32 = 10
+    alpha = cl.cl_float(10)
     data = Array(Float32, 5)
     data[1] = 0.1
     data[2] = 0.22
@@ -10,8 +12,8 @@ import clBLAS
     data[4] = 0.4444
     data[5] = 0.55555
 
-    alpha1 ::Float32 = 5
-    alpha2 ::Float32 = 2
+    alpha1 = cl.cl_float(5)
+    alpha2 = cl.cl_float(2)
     future = clblas.clblasSscal(data, alpha1)
     future = clblas.clblasSscal(future, alpha2)
 
