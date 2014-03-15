@@ -1,0 +1,5 @@
+gcc -I./lib -lclBLAS -L/Volumes/WORK/github/julia-cl-git/lib  -framework OpenCL -o main mainExample.c
+
+
+gcc -fPIC -g -c testShared.c
+clang -dynamiclib -undefined suppress -flat_namespace testShared.o -o testShared.dylib
