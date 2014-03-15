@@ -1,6 +1,5 @@
-include("../src/clblas.jl")
+import clBLAS
 
-function testSscal()
     clblas.setup()
     const cl = OpenCL
 
@@ -47,4 +46,3 @@ function testSscal()
     finally
         clblas.teardown()
     end
-end

@@ -1,6 +1,5 @@
-include("../src/clblas.jl")
+import clBLAS
 
-function testSscalWithFuture()
     clblas.setup()
     const cl = OpenCL
     alpha::Float32 = 10
@@ -26,4 +25,3 @@ function testSscalWithFuture()
     info("success!")
 
     clblas.teardown()
-end
