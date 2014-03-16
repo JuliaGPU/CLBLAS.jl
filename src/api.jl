@@ -3,14 +3,14 @@ module api
 import OpenCL
 const cl = OpenCL
 
-const libclBLAS = "libclBLAS"
+const libCLBLAS = "libCLBLAS"
 
    macro blas_func(func, arg_types)
         local args_in = Symbol[symbol("arg$i::$T")
                                for (i, T) in enumerate(arg_types.args)]
         quote
             function $(esc(func))($(args_in...))
-                local err::cl.CL_int = ccall(($(string(func)), libclBLAS),
+                local err::cl.CL_int = ccall(($(string(func)), libCLBLAS),
                                                 cl.CL_int,
                                                 $arg_types,
                                                 $(args_in...))
@@ -50,7 +50,7 @@ const libclBLAS = "libclBLAS"
                                for (i, T) in enumerate(arg_types.args)]
         quote
             function $(esc(func))($(args_in...))
-                ccall(($(string(func)), libclBLAS),
+                ccall(($(string(func)), libCLBLAS),
                                                 cl.CL_int,
                                                 $arg_types,
                                                 $(args_in...))

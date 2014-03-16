@@ -1,6 +1,6 @@
-import clBLAS
+import CLBLAS
 import OpenCL    
-    const clblas = clBLAS
+    const clblas = CLBLAS
     clblas.setup()
     const cl = OpenCL
 

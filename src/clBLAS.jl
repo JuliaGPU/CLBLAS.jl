@@ -1,6 +1,6 @@
 require("OpenCL")
 
-module clBLAS
+module CLBLAS
 
  # why there is a type assertion at context.jl line 38
    import OpenCL
