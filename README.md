@@ -1,3 +1,3 @@
-# clBLAS
+# CLBLAS.jl
 
-[![Build Status](https://travis-ci.org/ekobir/clBLAS.jl.png)](https://travis-ci.org/ekobir/clBLAS.jl)
+[![Build Status](https://travis-ci.org/ekobir/CLBLAS.jl.png)](https://travis-ci.org/ekobir/CLBLAS.jl)
