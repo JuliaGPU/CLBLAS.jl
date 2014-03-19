@@ -13,6 +13,21 @@ before_install:
   - sudo apt-get update -qq -y
   - sudo apt-get install -qq fglrx opencl-headers
   - sudo apt-get install libpcre3-dev julia -y
+
+before_script:
+  - cd ${TRAVIS_BUILD_DIR}
+  - mkdir -p deps/
+  - cd deps/
+  - git clone https://github.com/clMathLibraries/clBLAS
+  - cd ${TRAVIS_BUILD_DIR}
+  - mkdir -p bin/clBLAS
+  - cd bin/clBLAS
+  - cmake -DBoost_NO_SYSTEM_PATHS=OFF -DCMAKE_CXX_FLAGS="-std=c++11" ${TRAVIS_BUILD_DIR}/deps/clBLAS/src
+  - make install 
+  - export LD_LIBRARY_PATH=${TRAVIS_BUILD_DIR}/bin/clBLAS/library:${LD_LIBRARY_PATH}
+
 script:
+  - cd ${TRAVIS_BUILD_DIR}
   - julia -e 'Pkg.init(); run(`ln -s $(pwd()) $(Pkg.dir("CLBLAS"))`); Pkg.pin("CLBLAS"); Pkg.resolve()'
   - julia -e 'using CLBLAS; @assert isdefined(:CLBLAS); @assert typeof(CLBLAS) === Module'
+  - julia -e 'import CLBLAS; CLBLAS.setup()'
