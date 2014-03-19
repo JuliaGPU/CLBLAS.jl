@@ -31,3 +31,6 @@ script:
   - julia -e 'Pkg.init(); run(`ln -s $(pwd()) $(Pkg.dir("CLBLAS"))`); Pkg.pin("CLBLAS"); Pkg.resolve()'
   - julia -e 'using CLBLAS; @assert isdefined(:CLBLAS); @assert typeof(CLBLAS) === Module'
   - julia -e 'import CLBLAS; CLBLAS.setup()'
+  - julia examples/clblasSscal.jl 
+  - julia examples/clblasSscal_alt.jl
+  - julia examples/clblasSscal_future.jl
