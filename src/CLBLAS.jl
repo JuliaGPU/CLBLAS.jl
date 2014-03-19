@@ -45,7 +45,7 @@ module CLBLAS
        end
        #TODO: osx only due to https://github.com/clMathLibraries/clBLAS/issues/25
        available_devices = @osx? cl.devices(:gpu) : cl.devices()
-       if isempty(gpu_devices)
+       if isempty(available_devices)
            throw(cl.OpenCLException("Unable to create any OpenCL.Context, no available devices"))
        end
        if !isempty(available_devices)
