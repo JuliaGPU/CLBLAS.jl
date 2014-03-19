@@ -43,13 +43,13 @@ module CLBLAS
        if isempty(cl.platforms())
            throw(cl.OpenCLException("No OpenCL.Platform available"))
        end
-
-       gpu_devices = cl.devices(:gpu)
-       if isempty(gpu_devices)
+       #TODO: osx only due to https://github.com/clMathLibraries/clBLAS/issues/25
+       available_devices = @osx? cl.devices(:gpu) : cl.devices()
+       if isempty(available_devices)
            throw(cl.OpenCLException("Unable to create any OpenCL.Context, no available devices"))
        end
-       if !isempty(gpu_devices)
-           for dev in gpu_devices
+       if !isempty(available_devices)
+           for dev in available_devices
                local ctx::cl.Context
                local queue::cl.CmdQueue
                try

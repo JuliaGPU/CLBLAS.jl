@@ -37,7 +37,7 @@ import OpenCL
 
     result = Array(Float32, length(X))
     cl.enqueue_read_buffer(queue, X, result, unsigned(0), nothing, true)
-
+    
     expected = data * alpha1 * alpha2
     println(result)
     println("------------")
