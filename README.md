@@ -12,11 +12,10 @@ AMD clBLAS bindings for Julia and more…
 * What is on progress
     * clBLAS bindings with Julia BLAS interface aka Future/Event chaining. (examples/clblasSscal_future.jl)
 
-# This package uses OpenCL.jl by Jake Belowski
-
+This package uses OpenCL.jl by Jake Belowski 
 Please feel free to send your suggestions. 
 
-# Usage Example - clblasSscal call to direct clBlas interface 
+* Usage Example - clblasSscal call to direct clBlas interface 
 	
 	using CLBLAS
 	const clblas = CLBLAS
@@ -45,7 +44,7 @@ Please feel free to send your suggestions.
 	println(result)
    
 
-# Usage Example - clblasSscal by using Future
+* Usage Example - clblasSscal by using Future
 	using CLBLAS
 	const clblas = CLBLAS
 	const cl = clblas.cl
