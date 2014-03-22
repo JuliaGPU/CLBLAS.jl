@@ -51,8 +51,9 @@ import OpenCL
     println("------------")
     println(expected)
 
-    try
-        @assert(isapprox(norm(expected - result[1]), zero(Float32)))
+    try 
+        # locally passes without atol
+        @assert(isapprox(norm(expected - result[1]), zero(Float32), atol=0.00002))
         info("success!")
     finally
         clblas.teardown()
