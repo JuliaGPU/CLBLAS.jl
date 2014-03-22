@@ -44,7 +44,7 @@ import OpenCL
     println(expected)
 
     try
-        @assert(expected == result)
+        @assert(isapprox(norm(expected - result), zero(Float32)))
         info("success!")
     finally
         clblas.teardown()

@@ -34,3 +34,9 @@ script:
   - julia examples/clblasSscal.jl 
   - julia examples/clblasSscal_alt.jl
   - julia examples/clblasSscal_future.jl
+  - julia examples/clblasSasum.jl
+  - julia examples/clblasSswap.jl
+  - julia examples/clblasSaxpy.jl
+  - julia examples/clblasSdot.jl
+  - julia examples/clblasSnrm2.jl
+  - julia examples/clblasiSamax.jl

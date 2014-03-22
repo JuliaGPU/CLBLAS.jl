@@ -18,7 +18,7 @@ const libCLBLAS = "libclBLAS"
                  if err != cl.CL_SUCCESS
                     throw(cl.CLError(err))
                  end
-                return err
+                 return err
              end
         end
    end
