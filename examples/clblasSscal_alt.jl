@@ -23,11 +23,9 @@ import OpenCL
     clq = queue.id
     newl = cl.cl_uint(0)
 
-    event = clblas.clblasSscal(N, alpha1, X.id, offx, incx, [queue])
+    ptrEvent = clblas.clblasSscal(N, alpha1, X.id, offx, incx, [queue])
 
-    event2 = cl.UserEvent(ctx, retain=true)
-    ptrEvent2 = [event2.id]
-    clblas.clblasSscal(N, alpha2, X.id, offx, incx, ncq, [clq], cl.cl_uint(1), event, ptrEvent2)
+    ptrEvent2 = clblas.clblasSscal(N, alpha2, X.id, offx, incx,[queue], ptrEvent)
 
     cl.api.clWaitForEvents(cl.cl_uint(1), ptrEvent2)
 
