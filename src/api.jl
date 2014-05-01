@@ -14,7 +14,6 @@ const libCLBLAS = "libclBLAS"
                                                 cl.CL_int,
                                                 $arg_types,
                                                 $(args_in...))
-
                  if err != cl.CL_SUCCESS
                     throw(cl.CLError(err))
                  end

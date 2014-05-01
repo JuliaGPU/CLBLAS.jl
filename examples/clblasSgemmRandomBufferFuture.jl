@@ -17,15 +17,15 @@ import OpenCL
     matC = clblas.fetch(C)
 
     data = (5.0*matA*matB) + (2.0*matC)
-    println("data is good")
     future = clblas.clblasSgemm(uint32(0), uint32(0), alpha, A, B, beta, C)
-    println("clblas gemm is done")
 
     result = fetch(future)
     println(result)
     println("------------")
     println(data)
-    #@assert(result == data)
-    info("success!")
+    for i in 1:length(data)
+      Test.@test_approx_eq_eps result[i] data[i]  0.00001
+    end
 
+    info("success!")
     clblas.teardown()

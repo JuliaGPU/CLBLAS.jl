@@ -29,15 +29,14 @@ const cl = OpenCL
 macro blas_scal(func, argType1, argType2)
      quote
          function $(esc(func))( future_or_data::Union($argType1, Future), alpha::$argType2)
-             ctx, queue, number_of_elements, mem, req_num_events, events =
-                                  find_compute_context(future_or_data)
-             future_to_return = Future(ctx, queue, mem)
+             future = to_futures(future_or_data)[1]
+             req_num_events, events = getEvents(future)
+             future_to_return = Future(future.ctx, future.queue, future.mem, future.dims)
 
-             $(esc(func))(number_of_elements, alpha, pointer(mem),
+             $(esc(func))(length(future.mem), alpha, pointer(future.mem),
                          convert(Csize_t, 0), convert(Cint, 1), cl.cl_uint(1),
-                         [pointer(queue)], req_num_events, events,
-                         future_to_return.events)
-
+                         [pointer(future_to_return.queue)], req_num_events, events,
+                         future_to_return.event)
              return future_to_return
           end
      end

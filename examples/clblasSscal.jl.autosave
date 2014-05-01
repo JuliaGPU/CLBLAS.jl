@@ -28,12 +28,12 @@ import OpenCL
     event = cl.UserEvent(ctx, retain=true)
     ptrEvent = [event.id]
     clblas.clblasSscal(N, alpha1, X.id, offx, incx, ncq, [clq], newl, C_NULL, ptrEvent)
-    #println(event[:status])
-    #time = cl.CL_ulong[0]
-    #err_code = cl.api.clGetEventProfilingInfo(ptrEvent[1], cl.CL_COMPLETE,
-                                           sizeof(cl.CL_ulong), time, C_NULL)
-    #println("Error Code:", err_code)
-    #println("Complete in:", time)
+        #println(event[:status])
+        #time = cl.CL_ulong[0]
+        #err_code = cl.api.clGetEventProfilingInfo(ptrEvent[1], cl.CL_COMPLETE,
+                                               sizeof(cl.CL_ulong), time, C_NULL)
+        #println("Error Code:", err_code)
+        #println("Complete in:", time)
 
     event2 = cl.UserEvent(ctx, retain=true)
     ptrEvent2 = [event2.id]

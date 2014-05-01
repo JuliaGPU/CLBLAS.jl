@@ -63,6 +63,7 @@ int main( void )
     cl_mem bufA, bufB, bufC;
     cl_event event;
     int ret = 0;
+    cl_ulong e_time;
 
     printf("size of size_t:%lu\n", sizeof(size_t)); 
     printf("size of cl_context:%lu\n", sizeof(cl_context));
@@ -86,7 +87,7 @@ int main( void )
 
     props[1] = (cl_context_properties)platform;
     ctx = clCreateContext( props, 1, &device, NULL, NULL, &err );
-    queue = clCreateCommandQueue( ctx, device, 0, &err );
+    queue = clCreateCommandQueue( ctx, device, CL_QUEUE_PROFILING_ENABLE, &err );
 
     /* Setup clBLAS */
     err = clblasSetup( );
@@ -132,6 +133,14 @@ int main( void )
     /* Wait for calculations to be finished. */
     err = clWaitForEvents( 1, &event );
     printf("size of event:%lu \n", sizeof(event));
+    
+    err = clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_START, sizeof(cl_ulong), &e_time, NULL);
+    cl_ulong sTime = e_time;
+    err = clGetEventProfilingInfo(event, CL_PROFILING_COMMAND_END, sizeof(cl_ulong), &e_time, NULL);
+    printf("Error:%d \n", err);
+    printf("Time:%llu \n", e_time - sTime);
+
+    
     print_mem(&event, sizeof(event));
 
     printf("%s \n", "reading the result");

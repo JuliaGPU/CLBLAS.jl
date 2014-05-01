@@ -5,15 +5,23 @@ module CLBLAS
  # why there is a type assertion at context.jl line 38
    import OpenCL
    const cl = OpenCL
+   const RAND_FUNC = "rand_cl"
 
    include("util/enum.jl")
    include("constants.jl")
-   include("api.jl")
    include("future.jl")
+   include("api.jl")
+   include("rand.jl")
 
    include("L1/L1.jl")
    include("L2/L2.jl")
    include("L3/L3.jl")
+
+   LocalMem{T}(::Type{T}, len::Integer) = begin
+         @assert len > 0
+         nbytes = sizeof(T) * len
+         return LocalMem{T}(convert(Csize_t, nbytes))
+   end
 
    # setup function
    @api.blas_func(clblasSetup, ())
@@ -39,12 +47,12 @@ module CLBLAS
        return C_NULL
    end
 
-   function setup()
+   function setup(profile=false)
        if isempty(cl.platforms())
            throw(cl.OpenCLException("No OpenCL.Platform available"))
        end
        #TODO: osx only due to https://github.com/clMathLibraries/clBLAS/issues/25
-       available_devices = @osx? cl.devices(:gpu) : cl.devices()
+       available_devices = @osx ? cl.devices(:gpu) : cl.devices()
        if isempty(available_devices)
            throw(cl.OpenCLException("Unable to create any OpenCL.Context, no available devices"))
        end
@@ -54,7 +62,7 @@ module CLBLAS
                local queue::cl.CmdQueue
                try
                    ctx = cl.Context(dev, properties=nothing, callback=supress_context_error)
-                   queue  = cl.CmdQueue(ctx)
+                   queue  = profile ? cl.CmdQueue(ctx, :profile) : cl.CmdQueue(ctx);
                    push!(compute_context_holder, (dev, ctx, queue))
                catch err
                    error(err)

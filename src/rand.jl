@@ -10,10 +10,10 @@ function randByCtx(ctx)
 
         # build the program and
         p = cl.Program(ctx, source=randSource)
-        println(string("-I", joinpath(dirname(Base.source_path()), "../")))
-        p = cl.build!(p, options=string("-I", joinpath(dirname(Base.source_path()), "../")))
+        p = cl.build!(p, options=string("-I", joinpath(dirname(Base.source_path()), "../", " -w",
+                      )))
 
-        # construct a kernel object
+        # construct a kernel objec
         kern = cl.Kernel(p, RAND_FUNC)
         kern_dict[ctx] = kern
     end
@@ -23,7 +23,6 @@ end
 
 
 function randBuf(dims::Int...; ctx=nothing, queue=nothing)
-    println(dims)
     if(ctx == nothing)
          device, ctx, queue = get_next_compute_context()
     end
@@ -39,7 +38,7 @@ function randBuf(dims::Int...; ctx=nothing, queue=nothing)
     globalMem = cl.Buffer(Float32, ctx, :rw, dim)
     cl.set_arg!(kernel, 2, globalMem)
 
-    evt = cl.enqueue_kernel(queue, kernel, dim, 4)
+    evt = cl.enqueue_kernel(queue, kernel, dim/4)
 
-    return Future(ctx, queue, globalMem, evt)
+    return Future(ctx, queue, globalMem, dims, evt)
 end

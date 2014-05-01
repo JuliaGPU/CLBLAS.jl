@@ -4,12 +4,6 @@ const clblas = CLBLAS
 import OpenCL
 const cl = OpenCL
 
-#function testing(order::CLBLAS.clblasOrder, t1::CLBLAS.clblasTranspose, t2::CLBLAS.clblasTranspose)
-#    println(order, t1, t2)
-#end
-
-#testing(clblas.clblasColumnMajor, clblas.clblasNoTrans, clblas.clblasNoTrans)
-
 function testDirectCall()
         device, ctx, queue = clblas.get_next_compute_context()
         A = rand(Float32, 1)
@@ -72,15 +66,18 @@ function testRandMul()
      println("Result:", result)
 end
 
-
+ clblas.setup(true)
 function testRandBuf(x, y)
-     startT = time_ns()
+     #startT = time_ns()
      futBuf = clblas.randBuf(x, y)
-     futBuf = clblas.clblasSscal(futBuf, cl.cl_float(13.13))
-     cl.api.clWaitForEvents(cl.cl_uint(1), futBuf.events)
-     endT = time_ns()
+     #futBuf = clblas.clblasSscal(futBuf, cl.cl_float(13.13))
+     mat    =  clblas.fetch(futBuf)
+     #endT = time_ns()
 
-     println("RandBuf took:", (endT - startT)/1000000)
+     #println(futBuf.actualEvent[:status])
+     #println(futBuf.actualEvent[:profile_duration])
+     #println("RandBuf took:", (endT - startT)/1000000)
+     #println(mat)
 end
 
 function testRand(x, y)
