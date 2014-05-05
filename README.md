@@ -12,7 +12,7 @@ AMD clBLAS bindings for Julia and more…
 * What is on progress
     * clBLAS bindings for Julia BLAS interface by using Future/Event chaining. Progress can be seen in examples/clblasSscal_future.jl or below. Once all clBLAS L1, L2, L3 are defined with Future, another module will be added to override julia BLAS interface.
 
-This package uses OpenCL.jl by Jake Belowski. 
+This package uses OpenCL.jl by Jake Bolewski. 
 
 **_Please feel free to send your suggestions._** 
 
