@@ -7,6 +7,7 @@ kern_dict = Dict()
 function randByCtx(ctx)
     kern = get(kern_dict, ctx, nothing)
     if(kern == nothing)
+        local p = nothing
         try
             # build the program and
             p = cl.Program(ctx, source=randSource)
