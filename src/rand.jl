@@ -12,10 +12,12 @@ function randByCtx(ctx)
             # build the program and
             p = cl.Program(ctx, source=randSource)
             p = cl.build!(p, options=string("-I", joinpath(dirname(Base.source_path()), "../", " -w")))
-        catch 
+        catch e
            for (dev, status) in cl.info(p, :build_status)
               println("Build Error:", status)
            end
+           println("Build Error is printed.")
+           throw e
         end   
 
         # construct a kernel objec
