@@ -7,13 +7,15 @@ kern_dict = Dict()
 function randByCtx(ctx)
     kern = get(kern_dict, ctx, nothing)
     if(kern == nothing)
-
-        # build the program and
-        p = cl.Program(ctx, source=randSource)
-        p = cl.build!(p, options=string("-I", joinpath(dirname(Base.source_path()), "../", " -w")))
-        for (dev, status) in cl.info(p, :build_status)
-           println("info:", status)
-        end
+        try
+            # build the program and
+            p = cl.Program(ctx, source=randSource)
+            p = cl.build!(p, options=string("-I", joinpath(dirname(Base.source_path()), "../", " -w")))
+        catch 
+           for (dev, status) in cl.info(p, :build_status)
+              println("Build Error:", status)
+           end
+        end   
 
         # construct a kernel objec
         kern = cl.Kernel(p, RAND_FUNC)
