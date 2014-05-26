@@ -11,6 +11,9 @@ function randByCtx(ctx)
         # build the program and
         p = cl.Program(ctx, source=randSource)
         p = cl.build!(p, options=string("-I", joinpath(dirname(Base.source_path()), "../", " -w")))
+        for (dev, status) in cl.info(p, :build_status)
+           println("info:", status)
+        end
 
         # construct a kernel objec
         kern = cl.Kernel(p, RAND_FUNC)
