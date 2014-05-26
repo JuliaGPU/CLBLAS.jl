@@ -10,8 +10,7 @@ function randByCtx(ctx)
 
         # build the program and
         p = cl.Program(ctx, source=randSource)
-        p = cl.build!(p, options=string("-I", joinpath(dirname(Base.source_path()), "../", " -w",
-                      )))
+        p = cl.build!(p, options=string("-I", joinpath(dirname(Base.source_path()), "../", " -w")))
 
         # construct a kernel objec
         kern = cl.Kernel(p, RAND_FUNC)
