@@ -5,22 +5,16 @@ randSource = open(readall, joinpath(dirname(Base.source_path()), "rand.cl"))
 
 kern_dict = Dict()
 function randByCtx(ctx)
-    kern = get(kern_dict, ctx, nothing)
+    local kern = get(kern_dict, ctx, nothing)
     if(kern == nothing)
-        local p =  try
-            # build the program and
-            p = cl.Program(ctx, source=randSource)
-            cl.build!(p, options=string("-I", joinpath(dirname(Base.source_path()), "../", " -w")))
-        catch err
-           for (dev, status) in cl.info(p, :build_status)
-              println("Build Error:", status)
-           end
-           println("Build Error is printed.")
-        end   
-
-        # construct a kernel objec
-        kern = cl.Kernel(p, RAND_FUNC)
-        kern_dict[ctx] = kern
+       # build the program and
+       p = cl.Program(ctx, source=randSource)
+       p = cl.build!(p, options=string("-I", joinpath(dirname(Base.source_path()), "../", " -w")))
+       #dev, log = OpenCL.info(p, :build_log)
+       #println("Build Error:", log)
+       # construct a kernel obje
+       kern = cl.Kernel(p, RAND_FUNC)
+       kern_dict[ctx] = kern
     end
     return kern
 end

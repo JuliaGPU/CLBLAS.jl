@@ -41,4 +41,4 @@ script:
   - julia examples/clblasSnrm2.jl
   - julia examples/clblasiSamax.jl
   - julia examples/clblasSgemm_future.jl
-  - julia examples/clblasSgemmRandomBufferFuture.jl
+  #- julia examples/clblasSgemmRandomBufferFuture.jl
