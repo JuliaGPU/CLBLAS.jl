@@ -3,7 +3,8 @@ module api
 import OpenCL
 const cl = OpenCL
 
-const libCLBLAS = "libclBLAS"
+@unix_only const libCLBLAS = "libclBLAS"
+@windows_only const libCLBLAS = "clBLAS"
 
    macro blas_func(func, arg_types)
         local args_in = Symbol[symbol("arg$i::$T")
