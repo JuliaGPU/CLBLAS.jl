@@ -1,4 +1,3 @@
-require("OpenCL")
 
 module CLBLAS
 
@@ -6,6 +5,8 @@ module CLBLAS
    import OpenCL
    const cl = OpenCL
    const RAND_FUNC = "rand_cl"
+
+   using Compat
 
    include("util/enum.jl")
    include("constants.jl")

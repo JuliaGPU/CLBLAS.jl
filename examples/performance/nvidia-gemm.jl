@@ -26,9 +26,9 @@ import OpenCL
     sizeC = Ndim * Mdim
 
     # Number of elements in the matrix
-    h_A = fill(float32(AVAL), sizeA)
-    h_B = fill(float32(BVAL), sizeB)
-    h_C = fill(float32(CVAL), sizeC)
+    h_A = fill(Float32(AVAL), sizeA)
+    h_B = fill(Float32(BVAL), sizeB)
+    h_C = fill(Float32(CVAL), sizeC)
 
     data = reshape(h_A, Ndim, Pdim)*reshape(h_B, Pdim, Mdim) * 5 + 2.0*reshape(h_C, Ndim, Mdim)
 

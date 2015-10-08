@@ -1,6 +1,7 @@
 #
 #  This code has been taken https://raw.github.com/JuliaLang/julia/jn/enum2/base/enum.jl
 #
+
 abstract Enum
 
 Base.typemin{T<:Enum}(x::Type{T}) = T(0)
@@ -44,7 +45,7 @@ Base.names{T<:Enum}(x::Type{T}) = [s[1] for s in T]
 
 macro enum(T,syms...)
     assert(!isempty(syms))
-    vals = Array((Symbol,Int64),0)
+    vals = Array(@compat(Tuple{Symbol,Int64}),0)
     i::Int64 = -1
     lo::Int64 = typemax(Int64)
     hi::Int64 = typemin(Int64)
@@ -84,10 +85,10 @@ macro enum(T,syms...)
             enumT = Int64
         end
     else
-        if max(abs(lo),abs(hi)) < typemax(Uint32)
-            enumT = Uint32
+        if max(abs(lo),abs(hi)) < typemax(UInt32)
+            enumT = UInt32
         else
-            enumT = Uint64
+            enumT = UInt64
         end
     end
     blk = quote
@@ -130,9 +131,9 @@ Base.show(io::IO, x::Type{EnumMask}) = print(io, "EnumMask")
 
 macro enum_mask(T,syms...)
     if length(syms) <= 32
-        enumT = Uint32
+        enumT = UInt32
     elseif length(syms) <= 64
-        enumT = Uint64
+        enumT = UInt64
     else
         error("too many symbols for @enum_mask")
     end

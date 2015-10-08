@@ -1,5 +1,6 @@
 import CLBLAS
 import OpenCL
+using Compat
 
     const clblas = CLBLAS
     clblas.setup()
@@ -17,7 +18,7 @@ import OpenCL
     matC = clblas.fetch(C)
 
     data = (5.0*matA*matB) + (2.0*matC)
-    future = clblas.clblasSgemm(uint32(0), uint32(0), alpha, A, B, beta, C)
+    future = clblas.clblasSgemm(UInt32(0), UInt32(0), alpha, A, B, beta, C)
 
     result = fetch(future)
     println(result)
