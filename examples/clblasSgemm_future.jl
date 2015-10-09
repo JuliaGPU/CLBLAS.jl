@@ -12,7 +12,7 @@ import OpenCL
 
     data = (5.0*A*B) + (2.0*C)
 
-    future = clblas.clblasSgemm(uint32(0), uint32(0), alpha, A, B, beta, C)
+    future = clblas.clblasSgemm(UInt32(0), UInt32(0), alpha, A, B, beta, C)
 
     result = fetch(future)
     println(result)

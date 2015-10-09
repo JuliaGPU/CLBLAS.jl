@@ -1,5 +1,6 @@
 import OpenCL
 const cl = OpenCL
+using Compat
 
 type Future
    ctx::cl.Context
@@ -8,9 +9,9 @@ type Future
    #Dimensions are important to read the result back.
    dims::Tuple
    # Vector because we would like to keep the pointer around
-   event::Union(Vector{cl.CL_event}, Nothing)
+   event::@compat(Union{Vector{cl.CL_event}, Void})
    # kept around for profiling
-   actualEvent::Union(cl.CLEvent, Nothing)
+   actualEvent::@compat(Union{cl.CLEvent, Void})
 
    function Future{T}(ctx::cl.Context, queue::cl.CmdQueue, data::Array{T})
       #Sync call to create buffer
@@ -46,7 +47,7 @@ function getEvents(futures::Array{Future, 1})
    return (req_num_events, events)
 end
 
-function first_future(futures::Union(Array, Future)...)
+function first_future(futures::@compat(Union{Array, Future})...)
     for i in 1:length(futures)
         local future = futures[i]
         if typeof(future) == Future
@@ -56,7 +57,7 @@ function first_future(futures::Union(Array, Future)...)
     return nothing
 end
 
-function to_futures(inputs::Union(Array, Future)...)
+function to_futures(inputs::@compat(Union{Array, Future})...)
     local ctx = nothing
     local queue = nothing
     local mem = nothing

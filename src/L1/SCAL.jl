@@ -28,7 +28,7 @@ const cl = OpenCL
 
 macro blas_scal(func, argType1, argType2)
      quote
-         function $(esc(func))( future_or_data::Union($argType1, Future), alpha::$argType2)
+         function $(esc(func))( future_or_data::@compat(Union{$argType1, Future}), alpha::$argType2)
              future = to_futures(future_or_data)[1]
              req_num_events, events = getEvents(future)
              future_to_return = Future(future.ctx, future.queue, future.mem, future.dims)

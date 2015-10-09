@@ -2,6 +2,7 @@ module api
 
 import OpenCL
 const cl = OpenCL
+using Compat
 
 @unix_only const libCLBLAS = "libclBLAS"
 @windows_only const libCLBLAS = "clBLAS"
@@ -28,7 +29,7 @@ const cl = OpenCL
                                for (i, T) in enumerate(arg_types.args)]
 
         quote
-            function $(esc(func))($(args_in...), inQueues::Vector{cl.CmdQueue}, inEvents::Union(Vector{cl.CL_event}, Nothing)=nothing)
+            function $(esc(func))($(args_in...), inQueues::Vector{cl.CmdQueue}, inEvents::@compat(Union{Vector{cl.CL_event}, Void})=nothing)
                 local ctx = cl.info(inQueues[1], :context)
                 local num_queues = length(inQueues)
                 

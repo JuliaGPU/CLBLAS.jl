@@ -116,8 +116,8 @@ function runTimes(num::Int, device=nothing, context=nothing, queue=nothing, mmul
             device, context, queue = clblas.get_next_compute_context()
         end
 
-        alpha = float32(5)
-        beta  = float32(2)
+        alpha = Float32(5)
+        beta  = Float32(2)
 
         matSizes = generateAlmostSqRandomMatrixSize(num)
 

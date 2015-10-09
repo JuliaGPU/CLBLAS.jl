@@ -32,7 +32,7 @@ function randBuf(dims::Int...; ctx=nothing, queue=nothing)
 
     kernel = randByCtx(ctx)
 
-    seed = uint32(time_ns())
+    seed = floor(UInt32, time_ns() >> 32)
     cl.set_arg!(kernel, 1, seed)
     globalMem = cl.Buffer(Float32, ctx, :rw, dim)
     cl.set_arg!(kernel, 2, globalMem)

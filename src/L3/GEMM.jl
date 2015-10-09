@@ -1,21 +1,21 @@
 import OpenCL
 const cl = OpenCL
 
-@api.blas_func(clblasSgemm, (Uint32, Uint32, Uint32,
+@api.blas_func(clblasSgemm, (UInt32, UInt32, UInt32,
                              Csize_t, Csize_t, Csize_t, cl.CL_float, cl.CL_mem, Csize_t, Csize_t,
                              cl.CL_mem, Csize_t, Csize_t, cl.CL_float, cl.CL_mem, Csize_t, Csize_t,
                              cl.CL_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
                              Ptr{cl.CL_event}))
 
-@api.blas_func2(clblasSgemm, (Uint32, Uint32, Uint32,
+@api.blas_func2(clblasSgemm, (UInt32, UInt32, UInt32,
                 Csize_t, Csize_t, Csize_t, cl.CL_float, cl.CL_mem, Csize_t, Csize_t,
                 cl.CL_mem, Csize_t, Csize_t, cl.CL_float, cl.CL_mem, Csize_t, Csize_t))
 
 macro blas_gemm(func, arrType, mulType)
     quote
-        function $(esc(func))( at::Uint32, bt::Uint32,
-                alpha::$mulType, A::Union($arrType, Future),
-                B::Union($arrType, Future), beta::$mulType, C::Union($arrType, Future))
+        function $(esc(func))( at::UInt32, bt::UInt32,
+                alpha::$mulType, A::@compat(Union{$arrType, Future}),
+                B::@compat(Union{$arrType, Future}), beta::$mulType, C::@compat(Union{$arrType, Future}))
 
 
             futures = to_futures(A, B, C)
@@ -49,32 +49,32 @@ end
 
 @blas_gemm(clblasSgemm, Array{cl.CL_float}, cl.CL_float)
 
-@api.blas_func(clblasDgemm, (Uint32, Uint32, Uint32,
+@api.blas_func(clblasDgemm, (UInt32, UInt32, UInt32,
               Csize_t, Csize_t, Csize_t, cl.CL_double, cl.CL_mem, Csize_t, Csize_t,
               cl.CL_mem, Csize_t, Csize_t, cl.CL_double, cl.CL_mem, Csize_t, Csize_t,
               cl.cl_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
               Ptr{cl.CL_event}))
 
-@api.blas_func2(clblasDgemm, (Uint32, Uint32, Uint32,
+@api.blas_func2(clblasDgemm, (UInt32, UInt32, UInt32,
               Csize_t, Csize_t, Csize_t, cl.CL_double, cl.CL_mem, Csize_t, Csize_t,
               cl.CL_mem, Csize_t, Csize_t, cl.CL_double, cl.CL_mem, Csize_t, Csize_t))
 
-@api.blas_func(clblasCgemm, (Uint32, Uint32, Uint32,
+@api.blas_func(clblasCgemm, (UInt32, UInt32, UInt32,
             Csize_t, Csize_t, Csize_t, FloatComplex, cl.CL_mem, Csize_t, Csize_t,
             cl.CL_mem, Csize_t, Csize_t, FloatComplex, cl.CL_mem, Csize_t, Csize_t,
             cl.cl_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
             Ptr{cl.CL_event}))
 
-@api.blas_func2(clblasCgemm, (Uint32, Uint32, Uint32,
+@api.blas_func2(clblasCgemm, (UInt32, UInt32, UInt32,
             Csize_t, Csize_t, Csize_t, FloatComplex, cl.CL_mem, Csize_t, Csize_t,
             cl.CL_mem, Csize_t, Csize_t, FloatComplex, cl.CL_mem, Csize_t, Csize_t))
 
-@api.blas_func(clblasZgemm, (Uint32, Uint32, Uint32,
+@api.blas_func(clblasZgemm, (UInt32, UInt32, UInt32,
               Csize_t, Csize_t, Csize_t, DoubleComplex, cl.CL_mem, Csize_t, Csize_t,
               cl.CL_mem, Csize_t, Csize_t, DoubleComplex, cl.CL_mem, Csize_t, Csize_t,
               cl.cl_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
               Ptr{cl.CL_event}))
 
-@api.blas_func2(clblasZgemm, (Uint32, Uint32, Uint32,
+@api.blas_func2(clblasZgemm, (UInt32, UInt32, UInt32,
               Csize_t, Csize_t, Csize_t, DoubleComplex, cl.CL_mem, Csize_t, Csize_t,
               cl.CL_mem, Csize_t, Csize_t, DoubleComplex, cl.CL_mem, Csize_t, Csize_t))
