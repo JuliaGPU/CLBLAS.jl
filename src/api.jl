@@ -40,7 +40,7 @@ using Compat
                     events = inEvents
                 end 
                 
-                local queues = Ptr[ queue.id for queue in inQueues]
+                local queues = cl.CL_command_queue[ queue.id for queue in inQueues ]
                 
                 local event = cl.UserEvent(ctx, retain=true)
                 local ptrEvent = [event.id]
