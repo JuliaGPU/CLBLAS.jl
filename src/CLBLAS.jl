@@ -12,6 +12,7 @@ module CLBLAS
    include("constants.jl")
    include("future.jl")
    include("api.jl")
+   include("newapi.jl")
    include("rand.jl")
 
    include("L1/L1.jl")
