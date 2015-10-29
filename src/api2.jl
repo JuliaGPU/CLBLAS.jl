@@ -6,8 +6,10 @@ include("constants.jl")
 import OpenCL
 const cl = OpenCL
 
-@unix_only const libCLBLAS = "libclBLAS"
-@windows_only const libCLBLAS = "clBLAS"
+
+## @unix_only const libCLBLAS = "libclBLAS"
+## @windows_only const libCLBLAS = "clBLAS"
+
 
 function parse_fun_expr(ex)
     if !(ex.head == :call)
@@ -48,7 +50,8 @@ Macro for calling CLBLAS C API functions. Usage example:
 
 Note: All parameter types are resolved in a macro definition environment,
       so only OpenCL types (e.g. cl.CL_float), CL_float2 and CL_double2
-      are currently supported
+      are currently supported (which is essentially enough for wrapping
+      CLBLAS C API)
 """
 macro blasfun(expr)
     f, args, types = parse_fun_expr(expr)
@@ -108,21 +111,21 @@ macro blasfun2(expr)
 
     ex_body = quote
         local ctx = cl.info(inQueues[1], :context)
-        local num_queues = length(inQueues)
+        local num_queues = cl.CL_uint(length(inQueues))
 
         local num_events = cl.cl_uint(0)
-        local events = C_NULL
+        local events = Ptr{Void}[C_NULL]
         if (inEvents != [])
             num_events = cl.cl_uint(length(inEvents))
             events = inEvents
         end
 
-        local queues = Ptr[queue.id for queue in inQueues]
+        local queues = Ptr{Void}[queue.id for queue in inQueues]
 
         local event = cl.UserEvent(ctx, retain=true)
-        local ptrEvent = [event.id]
-        local err = $f($(args...), num_queues, queues, num_events,
-                       events, ptrEvent)
+        local ptrEvent = Ptr{Void}[event.id]
+        local err = $f($(args...), num_queues, pointer(queues), num_events,
+                       pointer(events), pointer(ptrEvent))
         if err != cl.CL_SUCCESS
             throw(cl.CLError(err))
         end
@@ -133,14 +136,5 @@ macro blasfun2(expr)
     return esc(ex)
 end
 
-# TODO: remove
-## function main()
-##     macroexpand(:(@api2.blasfun clblasSaxpy(x::CL_float2)))
-
-##     @api2.blasfun clblasSaxpy(x::CL_float2)
-
-## end
-
 
 end
-
