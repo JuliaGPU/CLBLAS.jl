@@ -1,47 +1,20 @@
-@api.blas_func(clblasSdot, (Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, Cint,
-                            cl.CL_mem, Csize_t, Cint, cl.CL_mem,
-                            cl.CL_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-                            Ptr{cl.CL_event}))
 
-@api.blas_func2(clblasSdot, (Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, Cint,
-                            cl.CL_mem, Csize_t, Cint, cl.CL_mem))
+for func in [:clblasSdot, :clblasDdot,
+             :clblasCdotu, :clblasZdotu,
+             :clblasCdotc, :clblasZdotc]
+    
+    @eval @api2.blasfun $func(N::Csize_t, dot_product::cl.CL_mem, offDP::Csize_t,
+                              X::cl.CL_mem, offx::Csize_t, incx::Cint,
+                              Y::cl.CL_mem, offy::Csize_t, incy::Cint,
+                              scratch_buff::cl.CL_mem,
+                              n_queues::cl.CL_uint,
+                              queues::Ptr{cl.CL_command_queue},
+                              n_events_in_wait_list::cl.CL_uint,
+                              event_wait_list::Ptr{cl.CL_event},
+                              events::Ptr{cl.CL_event})
+    @eval @api2.blasfun2 $func(N::Csize_t, dot_product::cl.CL_mem, offDP::Csize_t,
+                              X::cl.CL_mem, offx::Csize_t, incx::Cint,
+                              Y::cl.CL_mem, offy::Csize_t, incy::Cint,
+                              scratch_buff::cl.CL_mem)
+end
 
-@api.blas_func(clblasDdot, (Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, Cint,
-                           cl.CL_mem, Csize_t, Cint, cl.CL_mem,
-                           cl.CL_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-                           Ptr{cl.CL_event}))
-
-@api.blas_func2(clblasDdot, (Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, Cint,
-                           cl.CL_mem, Csize_t, Cint, cl.CL_mem))
-
-@api.blas_func(clblasCdotu, (Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, Cint,
-                             cl.CL_mem, Csize_t, Cint, cl.CL_mem,
-                             cl.CL_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-                             Ptr{cl.CL_event}))
-
-@api.blas_func2(clblasCdotu, (Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, Cint,
-                             cl.CL_mem, Csize_t, Cint, cl.CL_mem))
-
-@api.blas_func(clblasZdotu, (Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, Cint,
-                             cl.CL_mem, Csize_t, Cint, cl.CL_mem,
-                             cl.CL_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-                             Ptr{cl.CL_event}))
-
-@api.blas_func2(clblasZdotu, (Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, Cint,
-                              cl.CL_mem, Csize_t, Cint, cl.CL_mem))
-
-@api.blas_func(clblasCdotc, (Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, Cint,
-                             cl.CL_mem, Csize_t, Cint, cl.CL_mem,
-                             cl.CL_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-                             Ptr{cl.CL_event}))
-
-@api.blas_func2(clblasCdotc, (Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, Cint,
-                             cl.CL_mem, Csize_t, Cint, cl.CL_mem))
-
-@api.blas_func(clblasZdotc, (Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, Cint,
-                             cl.CL_mem, Csize_t, Cint, cl.CL_mem,
-                             cl.CL_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-                             Ptr{cl.CL_event}))
-
-@api.blas_func2(clblasZdotc, (Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, Cint,
-                             cl.CL_mem, Csize_t, Cint, cl.CL_mem))

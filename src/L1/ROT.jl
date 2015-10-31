@@ -1,39 +1,63 @@
-@api.blas_func(clblasSrot, (Csize_t, cl.CL_mem, Csize_t, Cint,
-                                       cl.CL_mem, Csize_t, Cint,
-                                       cl.CL_float, cl.CL_float,
-                              cl.CL_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-                              Ptr{cl.CL_event}))
 
-@api.blas_func2(clblasSrot, (Csize_t, cl.CL_mem, Csize_t, Cint,
-                                       cl.CL_mem, Csize_t, Cint,
-                                       cl.CL_float, cl.CL_float))
+@api2.blasfun clblasSrot(N::Csize_t,
+                         X::cl.CL_mem, offx::Csize_t, incx::Cint,
+                         Y::cl.CL_mem, offy::Csize_t, incy::Cint,
+                         C::cl.CL_float, S::cl.CL_float,
+                         n_queues::cl.CL_uint,
+                         queues::Ptr{cl.CL_command_queue},
+                         n_events_in_wait_list::cl.CL_uint,
+                         event_wait_list::Ptr{cl.CL_event},
+                         events::Ptr{cl.CL_event})
+                         
+@api2.blasfun2 clblasSrot(N::Csize_t,
+                          X::cl.CL_mem, offx::Csize_t, incx::Cint,
+                          Y::cl.CL_mem, offy::Csize_t, incy::Cint,
+                          C::cl.CL_float, S::cl.CL_float)
+                          
 
-@api.blas_func(clblasDrot, (Csize_t, cl.CL_mem, Csize_t, Cint,
-                                       cl.CL_mem, Csize_t, Cint,
-                                       cl.CL_double, cl.CL_double,
-                              cl.CL_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-                              Ptr{cl.CL_event}))
+@api2.blasfun clblasDrot(N::Csize_t,
+                         X::cl.CL_mem, offx::Csize_t, incx::Cint,
+                         Y::cl.CL_mem, offy::Csize_t, incy::Cint,
+                         C::cl.CL_double, S::cl.CL_double,
+                         n_queues::cl.CL_uint,
+                         queues::Ptr{cl.CL_command_queue},
+                         n_events_in_wait_list::cl.CL_uint,
+                         event_wait_list::Ptr{cl.CL_event},
+                         events::Ptr{cl.CL_event})
 
-@api.blas_func2(clblasDrot, (Csize_t, cl.CL_mem, Csize_t, Cint,
-                                       cl.CL_mem, Csize_t, Cint,
-                                       cl.CL_double, cl.CL_double))
+@api2.blasfun2 clblasDrot(N::Csize_t,
+                          X::cl.CL_mem, offx::Csize_t, incx::Cint,
+                          Y::cl.CL_mem, offy::Csize_t, incy::Cint,
+                          C::cl.CL_double, S::cl.CL_double)
+                          
+@api2.blasfun clblasCsrot(N::Csize_t,
+                          X::cl.CL_mem, offx::Csize_t, incx::Cint,
+                          Y::cl.CL_mem, offy::Csize_t, incy::Cint,
+                          C::cl.CL_float, S::cl.CL_float,
+                          n_queues::cl.CL_uint,
+                          queues::Ptr{cl.CL_command_queue},
+                          n_events_in_wait_list::cl.CL_uint,
+                          event_wait_list::Ptr{cl.CL_event},
+                          events::Ptr{cl.CL_event})
+                         
+@api2.blasfun2 clblasCrot(N::Csize_t,
+                          X::cl.CL_mem, offx::Csize_t, incx::Cint,
+                          Y::cl.CL_mem, offy::Csize_t, incy::Cint,
+                          C::cl.CL_float, S::cl.CL_float)
 
-@api.blas_func(clblasCsrot, (Csize_t, cl.CL_mem, Csize_t, Cint,
-                                       cl.CL_mem, Csize_t, Cint,
-                                       cl.CL_float, cl.CL_float,
-                              cl.CL_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-                              Ptr{cl.CL_event}))
 
-@api.blas_func2(clblasCsrot, (Csize_t, cl.CL_mem, Csize_t, Cint,
-                                       cl.CL_mem, Csize_t, Cint,
-                                       cl.CL_float, cl.CL_float))
+@api2.blasfun clblasZdrot(N::Csize_t,
+                          X::cl.CL_mem, offx::Csize_t, incx::Cint,
+                          Y::cl.CL_mem, offy::Csize_t, incy::Cint,
+                          C::cl.CL_double, S::cl.CL_double,
+                          n_queues::cl.CL_uint,
+                          queues::Ptr{cl.CL_command_queue},
+                          n_events_in_wait_list::cl.CL_uint,
+                          event_wait_list::Ptr{cl.CL_event},
+                          events::Ptr{cl.CL_event})
 
-@api.blas_func(clblasZdrot, (Csize_t, cl.CL_mem, Csize_t, Cint,
-                                     cl.CL_mem, Csize_t, Cint,
-                                     cl.CL_double, cl.CL_double,
-                            cl.CL_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-                            Ptr{cl.CL_event}))
+@api2.blasfun2 clblasZdrot(N::Csize_t,
+                           X::cl.CL_mem, offx::Csize_t, incx::Cint,
+                           Y::cl.CL_mem, offy::Csize_t, incy::Cint,
+                           C::cl.CL_double, S::cl.CL_double)
 
-@api.blas_func2(clblasZdrot, (Csize_t, cl.CL_mem, Csize_t, Cint,
-                                     cl.CL_mem, Csize_t, Cint,
-                                     cl.CL_double, cl.CL_double))

@@ -1,19 +1,15 @@
-@api.blas_func(clblasSswap,  (Csize_t, cl.CL_mem, Csize_t, Cint, cl.CL_mem, Csize_t, Cint, cl.CL_uint,
-                              Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event}, Ptr{cl.CL_event}))
 
-@api.blas_func2(clblasSswap,  (Csize_t, cl.CL_mem, Csize_t, Cint, cl.CL_mem, Csize_t, Cint))
+for func in [:clblasSswap, :clblasDswap, :clblasCswap, :clblasZswap]
+    @eval @api2.blasfun $func(N::Csize_t,
+                              X::cl.CL_mem, offx::Csize_t, incx::Cint,
+                              Y::cl.CL_mem, offy::Csize_t, incy::Cint,
+                              n_queues::cl.CL_uint,
+                              queues::Ptr{cl.CL_command_queue},
+                              n_events_in_wait_list::cl.CL_uint,
+                              event_wait_list::Ptr{cl.CL_event},
+                              events::Ptr{cl.CL_event})
 
-@api.blas_func(clblasDswap,  (Csize_t, cl.CL_mem, Csize_t, Cint, cl.CL_mem, Csize_t, Cint, cl.CL_uint,
-                              Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event}, Ptr{cl.CL_event}))
-
-@api.blas_func2(clblasDswap,  (Csize_t, cl.CL_mem, Csize_t, Cint, cl.CL_mem, Csize_t, Cint))
-
-@api.blas_func(clblasCswap,  (Csize_t, cl.CL_mem, Csize_t, Cint, cl.CL_mem, Csize_t, Cint, cl.CL_uint,
-                              Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event}, Ptr{cl.CL_event}))
-
-@api.blas_func2(clblasCswap,  (Csize_t, cl.CL_mem, Csize_t, Cint, cl.CL_mem, Csize_t, Cint))
-
-@api.blas_func(clblasZswap,  (Csize_t, cl.CL_mem, Csize_t, Cint, cl.CL_mem, Csize_t, Cint, cl.CL_uint,
-                              Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event}, Ptr{cl.CL_event}))
-
-@api.blas_func2(clblasZswap,  (Csize_t, cl.CL_mem, Csize_t, Cint, cl.CL_mem, Csize_t, Cint))
+    @eval @api2.blasfun2 $func(N::Csize_t,
+                               X::cl.CL_mem, offx::Csize_t, incx::Cint,
+                               Y::cl.CL_mem, offy::Csize_t, incy::Cint)
+end
