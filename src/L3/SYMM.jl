@@ -1,55 +1,30 @@
-@api.blas_func(clblasSsymm, (clblasOrder, clblasSide, clblasUplo,
-               Csize_t, Csize_t, cl.cl_float,
-               cl.CL_mem, Csize_t, Csize_t,
-               cl.CL_mem, Csize_t, Csize_t, cl.cl_float,
-               cl.CL_mem, Csize_t, Csize_t,
-               cl.cl_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-               Ptr{cl.CL_event}))
 
-@api.blas_func2(clblasSsymm, (clblasOrder, clblasSide, clblasUplo,
-               Csize_t, Csize_t, cl.cl_float,
-               cl.CL_mem, Csize_t, Csize_t,
-               cl.CL_mem, Csize_t, Csize_t, cl.cl_float,
-               cl.CL_mem, Csize_t, Csize_t))
+for (func, typ) in [(:clblasSsymm, cl.CL_float),
+                    (:clblasDsymm, cl.CL_double),
+                    (:clblasCsymm, CL_float2),
+                    (:clblasZsymm, CL_double2)]
 
-@api.blas_func(clblasDsymm, (clblasOrder, clblasSide, clblasUplo,
-               Csize_t, Csize_t, cl.cl_double,
-               cl.CL_mem, Csize_t, Csize_t,
-               cl.CL_mem, Csize_t, Csize_t, cl.cl_double,
-               cl.CL_mem, Csize_t, Csize_t,
-               cl.cl_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-               Ptr{cl.CL_event}))
+    @eval @api2.blasfun $func(order::clblasOrder, side::clblasSide,
+                              uplo::clblasUplo,
+                              M::Csize_t, N::Csize_t,
+                              alpha::$typ,
+                              A::cl.CL_mem, offa::Csize_t, lda::Csize_t,
+                              B::cl.CL_mem, offb::Csize_t, ldb::Csize_t,
+                              beta::$typ,
+                              C::cl.CL_mem, offc::Csize_t, ldc::Csize_t,
+                              n_queues::cl.CL_uint,
+                              queues::Ptr{cl.CL_command_queue},
+                              n_events_in_wait_list::cl.CL_uint,
+                              event_wait_list::Ptr{cl.CL_event},
+                              events::Ptr{cl.CL_event})
 
-@api.blas_func2(clblasDsymm, (clblasOrder, clblasSide, clblasUplo,
-               Csize_t, Csize_t, cl.cl_double,
-               cl.CL_mem, Csize_t, Csize_t,
-               cl.CL_mem, Csize_t, Csize_t, cl.cl_double,
-               cl.CL_mem, Csize_t, Csize_t))
+    @eval @api2.blasfun2 $func(order::clblasOrder, side::clblasSide,
+                               uplo::clblasUplo,
+                               M::Csize_t, N::Csize_t,
+                               alpha::$typ,
+                               A::cl.CL_mem, offa::Csize_t, lda::Csize_t,
+                               B::cl.CL_mem, offb::Csize_t, ldb::Csize_t,
+                               beta::$typ,
+                               C::cl.CL_mem, offc::Csize_t, ldc::Csize_t)
 
-@api.blas_func(clblasCsymm, (clblasOrder, clblasSide, clblasUplo,
-               Csize_t, Csize_t, FloatComplex,
-               cl.CL_mem, Csize_t, Csize_t,
-               cl.CL_mem, Csize_t, Csize_t, FloatComplex,
-               cl.CL_mem, Csize_t, Csize_t,
-               cl.cl_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-               Ptr{cl.CL_event}))
-
-@api.blas_func2(clblasCsymm, (clblasOrder, clblasSide, clblasUplo,
-               Csize_t, Csize_t, FloatComplex,
-               cl.CL_mem, Csize_t, Csize_t,
-               cl.CL_mem, Csize_t, Csize_t, FloatComplex,
-               cl.CL_mem, Csize_t, Csize_t))
-
-@api.blas_func(clblasZsymm, (clblasOrder, clblasSide, clblasUplo,
-               Csize_t, Csize_t, DoubleComplex,
-               cl.CL_mem, Csize_t, Csize_t,
-               cl.CL_mem, Csize_t, Csize_t, DoubleComplex,
-               cl.CL_mem, Csize_t, Csize_t,
-               cl.cl_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-               Ptr{cl.CL_event}))
-
-@api.blas_func2(clblasZsymm, (clblasOrder, clblasSide, clblasUplo,
-               Csize_t, Csize_t, DoubleComplex,
-               cl.CL_mem, Csize_t, Csize_t,
-               cl.CL_mem, Csize_t, Csize_t, DoubleComplex,
-               cl.CL_mem, Csize_t, Csize_t))
+end

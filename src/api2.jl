@@ -17,11 +17,11 @@ function parse_fun_expr(ex)
     end
     f_name = ex.args[1]
     vars = Symbol[]
-    types = Union{Symbol,Expr}[]
+    types = Union{Symbol,Expr,DataType}[]
     for var_ex in ex.args[2:end]
         if isa(var_ex, Expr) && var_ex.head == :(::)
             sym = var_ex.args[1]::Symbol
-            typ = var_ex.args[2]::Union{Symbol,Expr}
+            typ = var_ex.args[2]::Union{Symbol,Expr,DataType}
         elseif isa(var_ex, Symbol)
             sym = var_ex
             typ = :Any

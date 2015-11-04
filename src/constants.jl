@@ -46,5 +46,5 @@ clblasInsufficientMemVecY             = -1007
 @enum clblasTranspose clblasNoTrans clblasTrans clblasConjTrans
 @enum clblasUplo clblasUpper clblasLower
 @enum clblasDiag clblasUnit clblasNonUnit
-
+@enum clblasSide clblasLeft clblasRight
 
