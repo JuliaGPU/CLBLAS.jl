@@ -1,47 +1,21 @@
-@api.blas_func(clblasStrsv, (clblasOrder, clblasUplo, clblasTranspose, clblasDiag,
-               Csize_t,
-               cl.CL_mem, Csize_t, Csize_t,
-               cl.CL_mem, Csize_t, Cint,
-               cl.cl_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-               Ptr{cl.CL_event}))
 
-@api.blas_func2(clblasStrsv, (clblasOrder, clblasUplo, clblasTranspose, clblasDiag,
-               Csize_t,
-               cl.CL_mem, Csize_t, Csize_t,
-               cl.CL_mem, Csize_t, Cint))
+for func in [:clblasStrsv, :clblasDtrsv, :clblasCtrsv, :clblasZtrsv]
+    
+    @eval @api2.blasfun $func(order::clblasOrder, uplo::clblasUplo,
+                              trans::clblasTranspose, diag::clblasDiag,
+                              N::Csize_t,
+                              A::cl.CL_mem, offa::Csize_t, lda::Csize_t,
+                              X::cl.CL_mem, offx::Csize_t, incx::Cint,
+                              n_queues::cl.CL_uint,
+                              queues::Ptr{cl.CL_command_queue},
+                              n_events_in_wait_list::cl.CL_uint,
+                              event_wait_list::Ptr{cl.CL_event},
+                              events::Ptr{cl.CL_event})
 
-@api.blas_func(clblasDtrsv, (clblasOrder, clblasUplo, clblasTranspose, clblasDiag,
-               Csize_t,
-               cl.CL_mem, Csize_t, Csize_t,
-               cl.CL_mem, Csize_t, Cint,
-               cl.cl_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-               Ptr{cl.CL_event}))
-
-@api.blas_func2(clblasDtrsv, (clblasOrder, clblasUplo, clblasTranspose, clblasDiag,
-               Csize_t,
-               cl.CL_mem, Csize_t, Csize_t,
-               cl.CL_mem, Csize_t, Cint))
-
-@api.blas_func(clblasCtrsv, (clblasOrder, clblasUplo, clblasTranspose, clblasDiag,
-              Csize_t,
-              cl.CL_mem, Csize_t, Csize_t,
-              cl.CL_mem, Csize_t, Cint,
-              cl.cl_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-              Ptr{cl.CL_event}))
-
-@api.blas_func2(clblasCtrsv, (clblasOrder, clblasUplo, clblasTranspose, clblasDiag,
-              Csize_t,
-              cl.CL_mem, Csize_t, Csize_t,
-              cl.CL_mem, Csize_t, Cint))
-
-@api.blas_func(clblasZtrsv, (clblasOrder, clblasUplo, clblasTranspose, clblasDiag,
-             Csize_t,
-             cl.CL_mem, Csize_t, Csize_t,
-             cl.CL_mem, Csize_t, Cint,
-             cl.cl_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-             Ptr{cl.CL_event}))
-
-@api.blas_func2(clblasZtrsv, (clblasOrder, clblasUplo, clblasTranspose, clblasDiag,
-             Csize_t,
-             cl.CL_mem, Csize_t, Csize_t,
-             cl.CL_mem, Csize_t, Cint))
+    @eval @api2.blasfun2 $func(order::clblasOrder, uplo::clblasUplo,
+                               trans::clblasTranspose, diag::clblasDiag,
+                               N::Csize_t,
+                               A::cl.CL_mem, offa::Csize_t, lda::Csize_t,
+                               X::cl.CL_mem, offx::Csize_t, incx::Cint)
+    
+end

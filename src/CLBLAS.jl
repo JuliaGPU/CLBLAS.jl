@@ -8,10 +8,14 @@ module CLBLAS
 
    using Compat
 
+   @unix_only const libCLBLAS = "libclBLAS"
+   @windows_only const libCLBLAS = "clBLAS"
+
    include("util/enum.jl")
    include("constants.jl")
    include("future.jl")
    include("api.jl")
+   include("api2.jl")
    include("rand.jl")
 
    include("L1/L1.jl")
@@ -98,3 +102,4 @@ module CLBLAS
        end
    end
 end # module
+

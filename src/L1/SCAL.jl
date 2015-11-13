@@ -1,3 +1,5 @@
+# keeping old API here since future-based clblasSscal uses it 
+
 @api.blas_func(clblasSscal, (Csize_t, cl.CL_float, cl.CL_mem, Csize_t, Cint,
                              cl.CL_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
                              Ptr{cl.CL_event}))
@@ -47,3 +49,23 @@ end
 @blas_scal(clblasDscal, Vector{Float64}, Float64)
 #@blas_scal(clblasCscal, Vector{cl.CL_float2}, cl.CL_float2)
 #@blas_scal(clblasZscal, Vector{cl.CL_double2}, cl.CL_double2)
+
+
+
+for (func, typ) in [(:clblasSscal, cl.CL_float),
+                    (:clblasDscal, cl.CL_double),
+                    (:clblasCscal, CL_float2),
+                    (:clblasZscal, CL_double2)]
+    
+    @eval @api2.blasfun $func(N::Csize_t, alpha::CL_double2,
+                              X::cl.CL_mem, offx::Csize_t, incx::Cint,
+                              n_queues::cl.CL_uint,
+                              queues::Ptr{cl.CL_command_queue},
+                              n_events_in_wait_list::cl.CL_uint,
+                              event_wait_list::Ptr{cl.CL_event},
+                              events::Ptr{cl.CL_event})
+
+    @eval @api2.blasfun2 $func(N::Csize_t, alpha::CL_double2,
+                               X::cl.CL_mem, offx::Csize_t, incx::Cint)
+    
+end

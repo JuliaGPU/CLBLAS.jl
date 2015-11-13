@@ -1,15 +1,19 @@
-@api.blas_func(clblasSrotmg, ( cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t,
-                             cl.CL_mem, Csize_t, cl.CL_mem, Csize_t,
-                             cl.CL_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-                             Ptr{cl.CL_event}))
 
-@api.blas_func2(clblasSrotmg, ( cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t,
-                             cl.CL_mem, Csize_t, cl.CL_mem, Csize_t))
+for func in [:clblasSrotmg, :clblasDrotmg]
+    @eval @api2.blasfun $func(SD1::cl.CL_mem, offSD1::Csize_t,
+                              SD2::cl.CL_mem, offSD2::Csize_t,
+                              SX1::cl.CL_mem, offSX1::Csize_t,
+                              SY1::cl.CL_mem, offSY1::Csize_t,
+                              SPARAM::cl.CL_mem, offSparam::Csize_t,
+                              n_queues::cl.CL_uint,
+                              queues::Ptr{cl.CL_command_queue},
+                              n_events_in_wait_list::cl.CL_uint,
+                              event_wait_list::Ptr{cl.CL_event},
+                              events::Ptr{cl.CL_event})
 
-@api.blas_func(clblasDrotmg, ( cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t,
-                             cl.CL_mem, Csize_t, cl.CL_mem, Csize_t,
-                             cl.CL_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-                             Ptr{cl.CL_event}))
-
-@api.blas_func2(clblasDrotmg, ( cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t,
-                             cl.CL_mem, Csize_t, cl.CL_mem, Csize_t))
+    @eval @api2.blasfun2 $func(SD1::cl.CL_mem, offSD1::Csize_t,
+                               SD2::cl.CL_mem, offSD2::Csize_t,
+                               SX1::cl.CL_mem, offSX1::Csize_t,
+                               SY1::cl.CL_mem, offSY1::Csize_t,
+                               SPARAM::cl.CL_mem, offSparam::Csize_t)
+end

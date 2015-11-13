@@ -1,23 +1,17 @@
-@api.blas_func(clblasiSamax, (Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, Cint, cl.CL_mem,
-                             cl.CL_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-                             Ptr{cl.CL_event}))
 
-@api.blas_func2(clblasiSamax, (Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, Cint, cl.CL_mem))
+for func in [:clblasiSamax, :clblasiDamax, :clblasiCamax, :clblasiZamax]
+    @eval @api2.blasfun $func(N::Csize_t,
+                              iMax::cl.CL_mem, offiMax::Csize_t,
+                              X::cl.CL_mem, offx::Csize_t, incx::Cint,
+                              scratch_buff::cl.CL_mem,
+                              n_queues::cl.CL_uint,
+                              queues::Ptr{cl.CL_command_queue},
+                              n_events_in_wait_list::cl.CL_uint,
+                              event_wait_list::Ptr{cl.CL_event},
+                              events::Ptr{cl.CL_event})
 
-@api.blas_func(clblasiDamax, (Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, Cint, cl.CL_mem,
-                             cl.CL_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-                             Ptr{cl.CL_event}))
-
-@api.blas_func2(clblasiDamax, (Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, Cint, cl.CL_mem))
-
-@api.blas_func(clblasiCamax, (Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, Cint, cl.CL_mem,
-                             cl.CL_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-                             Ptr{cl.CL_event}))
-
-@api.blas_func2(clblasiCamax, (Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, Cint, cl.CL_mem))
-
-@api.blas_func(clblasiZamax, (Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, Cint, cl.CL_mem,
-                             cl.CL_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-                             Ptr{cl.CL_event}))
-
-@api.blas_func2(clblasiZamax, (Csize_t, cl.CL_mem, Csize_t, cl.CL_mem, Csize_t, Cint, cl.CL_mem))
+    @eval @api2.blasfun2 $func(N::Csize_t,
+                               iMax::cl.CL_mem, offiMax::Csize_t,
+                               X::cl.CL_mem, offx::Csize_t, incx::Cint,
+                               scratch_buff::cl.CL_mem)
+end

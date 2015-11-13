@@ -1,23 +1,26 @@
-@api.blas_func(clblasChbmv, (clblasOrder, clblasUplo,
-               Csize_t, Csize_t, cl.CL_float2,
-               cl.CL_mem, Csize_t, Csize_t,
-               cl.CL_mem, Csize_t, Cint, cl.CL_float2, cl.CL_mem, Csize_t, Cint,
-               cl.cl_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-               Ptr{cl.CL_event}))
 
-@api.blas_func2(clblasChbmv, (clblasOrder, clblasUplo,
-               Csize_t, Csize_t, cl.CL_float2,
-               cl.CL_mem, Csize_t, Csize_t,
-               cl.CL_mem, Csize_t, Cint, cl.CL_float2, cl.CL_mem, Csize_t, Cint))
+for (func, typ) in [(:clblasChbmv, CL_float2),
+                    (:clblasZhbmv, CL_double2)]
+    
+    @eval @api2.blasfun $func(order::clblasOrder, uplo::clblasUplo,
+                              N::Csize_t, K::Csize_t,
+                              alpha::$typ,
+                              A::cl.CL_mem, offa::Csize_t, lda::Csize_t,
+                              X::cl.CL_mem, offx::Csize_t, incx::Cint,
+                              beta::$typ,
+                              Y::cl.CL_mem, offy::Csize_t, incy::Cint,
+                              n_queues::cl.CL_uint,
+                              queues::Ptr{cl.CL_command_queue},
+                              n_events_in_wait_list::cl.CL_uint,
+                              event_wait_list::Ptr{cl.CL_event},
+                              events::Ptr{cl.CL_event})
 
-@api.blas_func(clblasZhbmv, (clblasOrder, clblasUplo,
-               Csize_t, Csize_t, cl.CL_double2,
-               cl.CL_mem, Csize_t, Csize_t,
-               cl.CL_mem, Csize_t, Cint, cl.CL_double2, cl.CL_mem, Csize_t, Cint,
-               cl.cl_uint, Ptr{cl.CL_command_queue}, cl.CL_uint, Ptr{cl.CL_event},
-               Ptr{cl.CL_event}))
-
-@api.blas_func2(clblasZhbmv, (clblasOrder, clblasUplo,
-               Csize_t, Csize_t, cl.CL_double2,
-               cl.CL_mem, Csize_t, Csize_t,
-               cl.CL_mem, Csize_t, Cint, cl.CL_double2, cl.CL_mem, Csize_t, Cint))
+    @eval @api2.blasfun2 $func(order::clblasOrder, uplo::clblasUplo,
+                               N::Csize_t, K::Csize_t,
+                               alpha::$typ,
+                               A::cl.CL_mem, offa::Csize_t, lda::Csize_t,
+                               X::cl.CL_mem, offx::Csize_t, incx::Cint,
+                               beta::$typ,
+                               Y::cl.CL_mem, offy::Csize_t, incy::Cint)
+    
+end
