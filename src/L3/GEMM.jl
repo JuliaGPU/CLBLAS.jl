@@ -88,7 +88,7 @@ for (func, typ) in [(:clblasSgemm, cl.CL_float),
                     (:clblasCgemm, CL_float2),
                     (:clblasZgemm, CL_double2)]
     
-    @eval @api2.blasfun $func(order::UInt32,
+    @eval @api2.blasfun $func(order::clblasOrder,
                               transA::clblasTranspose, transB::clblasTranspose,
                               M::Csize_t, N::Csize_t, K::Csize_t,
                               alpha::$typ,
@@ -102,7 +102,7 @@ for (func, typ) in [(:clblasSgemm, cl.CL_float),
                               event_wait_list::Ptr{cl.CL_event},
                               events::Ptr{cl.CL_event})
 
-    @eval @api2.blasfun2 $func(order::UInt32,
+    @eval @api2.blasfun2 $func(order::clblasOrder,
                                transA::clblasTranspose, transB::clblasTranspose,
                                M::Csize_t, N::Csize_t, K::Csize_t,
                                alpha::$typ,

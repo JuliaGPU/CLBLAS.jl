@@ -35,6 +35,20 @@ function parse_fun_expr(ex)
     return f_name, vars, types
 end
 
+_jl_type(t::Type) = t
+_jl_type{T<:Integer}(t::Type{T}) = :Integer # any subclass of Integer should use the superclass instead
+_jl_type(t::Type{cl.CL_float}) = :Real
+_jl_type(t::Type{cl.CL_double}) = :Real
+_jl_type(t::Type{CL_float2}) = :(Union{Real, Complex})
+_jl_type(t::Type{CL_double2}) = :(Union{Real, Complex})
+_jl_type(s::Union{Symbol,Expr}) = begin
+    t = eval(s)
+    t2 = _jl_type(t)
+    t == t2 ? s : t2 # prefer original symbol/expression which retains use of typealiases, etc
+end
+
+_c_type(t::Type) = t
+_c_type{T<:Enum}(t::Type{T}) = Cint
 
 """
 Macro for calling CLBLAS C API functions. Usage example:
@@ -61,15 +75,16 @@ macro blasfun(expr)
     for (arg, typ) in zip(args, types)
         var_ex = Expr(:(::))
         push!(var_ex.args, arg)
-        push!(var_ex.args, typ)
+        push!(var_ex.args, _jl_type(typ))
         push!(ex_fun.args, var_ex)
     end
     push!(ex.args, ex_fun)
 
+    c_types = map(_c_type, map(eval, types))
     ex_body = quote
         local err::cl.CL_int = ccall(($(string(f)), libCLBLAS),
                                      cl.CL_int,
-                                     ($(map(eval, types)...),),
+                                     ($(map(eval, c_types)...),),
                                      $(args...))
         if err != cl.CL_SUCCESS
             throw(cl.CLError(err))
@@ -102,7 +117,7 @@ macro blasfun2(expr)
     for (arg, typ) in zip(args, types)
         var_ex = Expr(:(::))
         push!(var_ex.args, arg)
-        push!(var_ex.args, typ)
+        push!(var_ex.args, _jl_type(typ))
         push!(ex_fun.args, var_ex)
     end
     # additional argument - list of queues
