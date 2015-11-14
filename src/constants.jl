@@ -1,14 +1,7 @@
 import OpenCL
 
-immutable CL_float2
-   n1::OpenCL.CL_float
-   n2::OpenCL.CL_float
-end
-
-immutable CL_double2
-   n1::OpenCL.CL_double
-   n2::OpenCL.CL_double
-end
+typealias CL_float2 Complex64
+typealias CL_double2 Complex128
 
 typealias FloatComplex CL_float2
 typealias DoubleComplex CL_double2
