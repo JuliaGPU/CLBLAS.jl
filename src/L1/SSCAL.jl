@@ -2,7 +2,7 @@
 for (func, typ) in [(:clblasCsscal, cl.CL_float),
                     (:clblasZdscal, cl.CL_double)]
     
-    @eval @api2.blasfun $func(N::Csize_t, alpha::$typ,
+    @eval @blasfun $func(N::Csize_t, alpha::$typ,
                               X::cl.CL_mem, offx::Csize_t, incx::Cint,
                               n_queues::cl.CL_uint,
                               queues::Ptr{cl.CL_command_queue},
@@ -10,7 +10,7 @@ for (func, typ) in [(:clblasCsscal, cl.CL_float),
                               event_wait_list::Ptr{cl.CL_event},
                               events::Ptr{cl.CL_event})
 
-    @eval @api2.blasfun2 $func(N::Csize_t, alpha::$typ,
+    @eval @blasfun2 $func(N::Csize_t, alpha::$typ,
                                X::cl.CL_mem, offx::Csize_t, incx::Cint)
     
 end

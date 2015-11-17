@@ -15,12 +15,14 @@ module CLBLAS
    include("constants.jl")
    include("future.jl")
    include("api.jl")
-   include("api2.jl")
+   include("macros.jl")   
    include("rand.jl")
 
    include("L1/L1.jl")
    include("L2/L2.jl")
    include("L3/L3.jl")
+
+   include("highlevel.jl")
 
    LocalMem{T}(::Type{T}, len::Integer) = begin
          @assert len > 0

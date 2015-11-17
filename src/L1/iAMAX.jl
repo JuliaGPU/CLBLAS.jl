@@ -1,6 +1,6 @@
 
 for func in [:clblasiSamax, :clblasiDamax, :clblasiCamax, :clblasiZamax]
-    @eval @api2.blasfun $func(N::Csize_t,
+    @eval @blasfun $func(N::Csize_t,
                               iMax::cl.CL_mem, offiMax::Csize_t,
                               X::cl.CL_mem, offx::Csize_t, incx::Cint,
                               scratch_buff::cl.CL_mem,
@@ -10,7 +10,7 @@ for func in [:clblasiSamax, :clblasiDamax, :clblasiCamax, :clblasiZamax]
                               event_wait_list::Ptr{cl.CL_event},
                               events::Ptr{cl.CL_event})
 
-    @eval @api2.blasfun2 $func(N::Csize_t,
+    @eval @blasfun2 $func(N::Csize_t,
                                iMax::cl.CL_mem, offiMax::Csize_t,
                                X::cl.CL_mem, offx::Csize_t, incx::Cint,
                                scratch_buff::cl.CL_mem)

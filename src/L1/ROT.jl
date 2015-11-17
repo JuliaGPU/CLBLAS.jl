@@ -1,5 +1,5 @@
 
-@api2.blasfun clblasSrot(N::Csize_t,
+@blasfun clblasSrot(N::Csize_t,
                          X::cl.CL_mem, offx::Csize_t, incx::Cint,
                          Y::cl.CL_mem, offy::Csize_t, incy::Cint,
                          C::cl.CL_float, S::cl.CL_float,
@@ -9,13 +9,13 @@
                          event_wait_list::Ptr{cl.CL_event},
                          events::Ptr{cl.CL_event})
                          
-@api2.blasfun2 clblasSrot(N::Csize_t,
+@blasfun2 clblasSrot(N::Csize_t,
                           X::cl.CL_mem, offx::Csize_t, incx::Cint,
                           Y::cl.CL_mem, offy::Csize_t, incy::Cint,
                           C::cl.CL_float, S::cl.CL_float)
                           
 
-@api2.blasfun clblasDrot(N::Csize_t,
+@blasfun clblasDrot(N::Csize_t,
                          X::cl.CL_mem, offx::Csize_t, incx::Cint,
                          Y::cl.CL_mem, offy::Csize_t, incy::Cint,
                          C::cl.CL_double, S::cl.CL_double,
@@ -25,12 +25,12 @@
                          event_wait_list::Ptr{cl.CL_event},
                          events::Ptr{cl.CL_event})
 
-@api2.blasfun2 clblasDrot(N::Csize_t,
+@blasfun2 clblasDrot(N::Csize_t,
                           X::cl.CL_mem, offx::Csize_t, incx::Cint,
                           Y::cl.CL_mem, offy::Csize_t, incy::Cint,
                           C::cl.CL_double, S::cl.CL_double)
                           
-@api2.blasfun clblasCsrot(N::Csize_t,
+@blasfun clblasCsrot(N::Csize_t,
                           X::cl.CL_mem, offx::Csize_t, incx::Cint,
                           Y::cl.CL_mem, offy::Csize_t, incy::Cint,
                           C::cl.CL_float, S::cl.CL_float,
@@ -40,13 +40,13 @@
                           event_wait_list::Ptr{cl.CL_event},
                           events::Ptr{cl.CL_event})
                          
-@api2.blasfun2 clblasCrot(N::Csize_t,
+@blasfun2 clblasCrot(N::Csize_t,
                           X::cl.CL_mem, offx::Csize_t, incx::Cint,
                           Y::cl.CL_mem, offy::Csize_t, incy::Cint,
                           C::cl.CL_float, S::cl.CL_float)
 
 
-@api2.blasfun clblasZdrot(N::Csize_t,
+@blasfun clblasZdrot(N::Csize_t,
                           X::cl.CL_mem, offx::Csize_t, incx::Cint,
                           Y::cl.CL_mem, offy::Csize_t, incy::Cint,
                           C::cl.CL_double, S::cl.CL_double,
@@ -56,7 +56,7 @@
                           event_wait_list::Ptr{cl.CL_event},
                           events::Ptr{cl.CL_event})
 
-@api2.blasfun2 clblasZdrot(N::Csize_t,
+@blasfun2 clblasZdrot(N::Csize_t,
                            X::cl.CL_mem, offx::Csize_t, incx::Cint,
                            Y::cl.CL_mem, offy::Csize_t, incy::Cint,
                            C::cl.CL_double, S::cl.CL_double)
