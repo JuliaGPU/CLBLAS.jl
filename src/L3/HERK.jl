@@ -2,7 +2,7 @@
 for (func, typ) in [(:clblasCherk, cl.CL_float),
                     (:clblasZherk, cl.CL_double)]
     
-    @eval @api2.blasfun $func(order::clblasOrder, uplo::clblasUplo,
+    @eval @blasfun $func(order::clblasOrder, uplo::clblasUplo,
                               trans::clblasTranspose,
                               N::Csize_t, K::Csize_t,
                               alpha::$typ,
@@ -15,7 +15,7 @@ for (func, typ) in [(:clblasCherk, cl.CL_float),
                               event_wait_list::Ptr{cl.CL_event},
                               events::Ptr{cl.CL_event})
 
-    @eval @api2.blasfun2 $func(order::clblasOrder, uplo::clblasUplo,
+    @eval @blasfun2 $func(order::clblasOrder, uplo::clblasUplo,
                                trans::clblasTranspose,
                                N::Csize_t, K::Csize_t,
                                alpha::$typ,

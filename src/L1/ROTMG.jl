@@ -1,6 +1,6 @@
 
 for func in [:clblasSrotmg, :clblasDrotmg]
-    @eval @api2.blasfun $func(SD1::cl.CL_mem, offSD1::Csize_t,
+    @eval @blasfun $func(SD1::cl.CL_mem, offSD1::Csize_t,
                               SD2::cl.CL_mem, offSD2::Csize_t,
                               SX1::cl.CL_mem, offSX1::Csize_t,
                               SY1::cl.CL_mem, offSY1::Csize_t,
@@ -11,7 +11,7 @@ for func in [:clblasSrotmg, :clblasDrotmg]
                               event_wait_list::Ptr{cl.CL_event},
                               events::Ptr{cl.CL_event})
 
-    @eval @api2.blasfun2 $func(SD1::cl.CL_mem, offSD1::Csize_t,
+    @eval @blasfun2 $func(SD1::cl.CL_mem, offSD1::Csize_t,
                                SD2::cl.CL_mem, offSD2::Csize_t,
                                SX1::cl.CL_mem, offSX1::Csize_t,
                                SY1::cl.CL_mem, offSY1::Csize_t,

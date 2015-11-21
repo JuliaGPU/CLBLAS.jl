@@ -1,15 +1,3 @@
-module api2
-
-# including CL_float2 and CL_double2 types
-include("constants.jl")
-
-import OpenCL
-const cl = OpenCL
-
-
-## @unix_only const libCLBLAS = "libclBLAS"
-## @windows_only const libCLBLAS = "clBLAS"
-
 
 function parse_fun_expr(ex)
     if !(ex.head == :call)
@@ -136,5 +124,3 @@ macro blasfun2(expr)
     return esc(ex)
 end
 
-
-end

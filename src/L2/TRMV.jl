@@ -1,7 +1,7 @@
 
 for func in [:clblasStrmv, :clblasDtrmv, :clblasCtrmv, :clblasZtrmv]
     
-    @eval @api2.blasfun $func(order::clblasOrder, uplo::clblasUplo,
+    @eval @blasfun $func(order::clblasOrder, uplo::clblasUplo,
                               trans::clblasTranspose, diag::clblasDiag,
                               N::Csize_t,
                               A::cl.CL_mem, offa::Csize_t, lda::Csize_t,
@@ -13,7 +13,7 @@ for func in [:clblasStrmv, :clblasDtrmv, :clblasCtrmv, :clblasZtrmv]
                               event_wait_list::Ptr{cl.CL_event},
                               events::Ptr{cl.CL_event})
 
-    @eval @api2.blasfun2 $func(order::clblasOrder, uplo::clblasUplo,
+    @eval @blasfun2 $func(order::clblasOrder, uplo::clblasUplo,
                                trans::clblasTranspose, diag::clblasDiag,
                                N::Csize_t,
                                A::cl.CL_mem, offa::Csize_t, lda::Csize_t,
