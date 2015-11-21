@@ -3,14 +3,6 @@ import OpenCL.CLArray
 
 #### common stuff
 
-# TODO: is this conversion valid?
-Base.convert(::Type{CL_float2}, x::Complex{Float32}) =
-    CL_double2(real(x), imag(x))
-
-Base.convert(::Type{CL_double2}, x::Complex{Float64}) =
-    CL_double2(real(x), imag(x))
-
-
 function transval(t::Char)
     return t == 'T' ? clblasTrans : clblasNoTrans
 end
