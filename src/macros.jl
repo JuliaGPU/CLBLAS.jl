@@ -110,14 +110,14 @@ macro blasfun2(expr)
 
         local queues = Ptr{Void}[queue.id for queue in inQueues]
 
-        local event = cl.UserEvent(ctx, retain=true)
-        local ptrEvent = Ptr{Void}[event.id]
+        local ret_event = Array(cl.CL_event, 1)
+        # ret_event = Array(CL_event, 1)
         local err = $f($(args...), num_queues, pointer(queues), num_events,
-                       pointer(events), pointer(ptrEvent))
+                       pointer(events), pointer(ret_event))
         if err != cl.CL_SUCCESS
             throw(cl.CLError(err))
         end
-        ptrEvent
+        return cl.Event(ret_event[1], retain=false)
     end
 
     push!(ex.args, ex_body)

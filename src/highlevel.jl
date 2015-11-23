@@ -25,9 +25,9 @@ for (func, typ) in [(:clblasSaxpy, Float32), (:clblasDaxpy, Float64),
     @eval function axpy!(alpha::$typ, x::CLArray{$typ,1}, y::CLArray{$typ,1};
                          queue=cl.queue(x))
         @assert length(x) == length(y) "x and y have different sizes"
-        $func(Csize_t(length(x)), alpha,
-                    bufptr(x), Csize_t(0), Cint(1),
-                    bufptr(y), Csize_t(0), Cint(1), [queue])
+        return $func(Csize_t(length(x)), alpha,
+                     bufptr(x), Csize_t(0), Cint(1),
+                     bufptr(y), Csize_t(0), Cint(1), [queue])
     end
 
 end
@@ -52,7 +52,7 @@ for (func, typ) in [(:clblasSgemm, Float32), (:clblasDgemm, Float64),
         M = UInt64(size(A)[1])
         N = UInt64(size(B)[2])
         K = UInt64(size(A)[2])
-        $func(clblasColumnMajor, transval(tA), transval(tB), M, N, K,
+        return $func(clblasColumnMajor, transval(tA), transval(tB), M, N, K,
               alpha, cl.bufptr(A), UInt(0), M, cl.bufptr(B), UInt(0), K,
               beta, cl.bufptr(C), UInt(0), M, [queue])
     end
