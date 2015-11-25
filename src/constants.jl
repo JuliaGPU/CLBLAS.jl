@@ -1,17 +1,8 @@
 import OpenCL
 
-immutable CL_float2
-   n1::OpenCL.CL_float
-   n2::OpenCL.CL_float
-end
+typealias CL_float2 Complex64
+typealias CL_double2 Complex128
 
-immutable CL_double2
-   n1::OpenCL.CL_double
-   n2::OpenCL.CL_double
-end
-
-typealias FloatComplex CL_float2
-typealias DoubleComplex CL_double2
 
 clblasInvalidCommandQueue             = OpenCL.CL_INVALID_COMMAND_QUEUE
 clblasInvalidContext                  = OpenCL.CL_INVALID_CONTEXT
