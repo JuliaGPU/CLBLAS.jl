@@ -95,8 +95,8 @@ module CLBLAS
    function release!(compute_context_holder::Vector{Tuple})
        for (dev, ctx, queue) in compute_context_holder
            try
-              cl.release!(queue)
-              cl.release!(ctx)
+              finalize(queue)
+              finalize(ctx)
            catch err
               println(err)
               continue
