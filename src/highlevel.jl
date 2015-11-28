@@ -18,8 +18,8 @@ for (func, typ) in [(:clblasSaxpy, Float32), (:clblasDaxpy, Float64),
                          queue=cl.queue(x))
         @assert length(x) == length(y) "x and y have different sizes"
         return $func(Csize_t(length(x)), alpha,
-                     bufptr(x), Csize_t(0), Cint(1),
-                     bufptr(y), Csize_t(0), Cint(1), [queue])
+                     pointer(x), Csize_t(0), Cint(1),
+                     pointer(y), Csize_t(0), Cint(1), [queue])
     end
 
 end
@@ -45,8 +45,8 @@ for (func, typ) in [(:clblasSgemm, Float32), (:clblasDgemm, Float64),
         N = UInt64(size(B)[2])
         K = UInt64(size(A)[2])
         return $func(clblasColumnMajor, transval(tA), transval(tB), M, N, K,
-              alpha, cl.bufptr(A), UInt(0), M, cl.bufptr(B), UInt(0), K,
-              beta, cl.bufptr(C), UInt(0), M, [queue])
+              alpha, cl.pointer(A), UInt(0), M, cl.pointer(B), UInt(0), K,
+              beta, cl.pointer(C), UInt(0), M, [queue])
     end
     
 end
