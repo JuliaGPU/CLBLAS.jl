@@ -78,7 +78,7 @@ end
 """
 Shorter version of @blasfun with reduced number of parameters
 """
-macro blasfun2(expr)    
+macro blasfun2(expr)
     f, args, types = parse_fun_expr(expr)
     ex = Expr(:function)
     ex_fun = Expr(:(call))
@@ -102,18 +102,29 @@ macro blasfun2(expr)
         local num_queues = cl.CL_uint(length(inQueues))
 
         local num_events = cl.cl_uint(0)
-        local events = Ptr{Void}[C_NULL]
+        local events = Ptr{Void}[]
         if (inEvents != [])
             num_events = cl.cl_uint(length(inEvents))
             events = inEvents
         end
 
         local queues = Ptr{Void}[queue.id for queue in inQueues]
-
         local ret_event = Array(cl.CL_event, 1)
-        # ret_event = Array(CL_event, 1)
-        local err = $f($(args...), num_queues, pointer(queues), num_events,
-                       pointer(events), pointer(ret_event))
+
+        # local err = $f($(args...), num_queues, pointer(queues), num_events,
+        #                pointer(events), pointer(ret_event))
+        local err::cl.CL_int = ccall(($(string(f)), libCLBLAS),
+                                     cl.CL_int,
+                                     ($(map(eval, types)...),
+                                      # common types
+                                      Cuint, Ptr{Ptr{Void}},
+                                      Cuint, Ptr{Ptr{Void}},
+                                      Ptr{Ptr{Void}},),
+                                     $(args...),
+                                     # common params
+                                     num_queues, pointer(queues),
+                                     num_events, pointer(events),
+                                     pointer(ret_event))
         if err != cl.CL_SUCCESS
             throw(cl.CLError(err))
         end
@@ -123,4 +134,3 @@ macro blasfun2(expr)
     push!(ex.args, ex_body)
     return esc(ex)
 end
-

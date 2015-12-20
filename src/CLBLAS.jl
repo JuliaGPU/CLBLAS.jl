@@ -1,6 +1,8 @@
 
 module CLBLAS
 
+export axpy!, scal!, gemm!
+
 # why there is a type assertion at context.jl line 38
 import OpenCL
 const cl = OpenCL
@@ -11,7 +13,7 @@ using Compat
 @windows_only const libCLBLAS = "clBLAS"
 
 include("constants.jl")
-include("macros.jl")   
+include("macros.jl")
 
 include("L1/L1.jl")
 include("L2/L2.jl")
@@ -100,4 +102,3 @@ function release!(compute_context_holder::Vector{Tuple})
 end
 
 end # module
-   

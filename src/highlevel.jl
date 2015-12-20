@@ -1,5 +1,6 @@
 
 import OpenCL.CLArray
+import Base.LinAlg.BLAS: axpy!, scal!, gemm!
 
 #### common stuff
 
@@ -24,6 +25,20 @@ for (func, typ) in [(:clblasSaxpy, Float32), (:clblasDaxpy, Float64),
 
 end
 
+
+## SCAL
+for (func, typ) in [(:clblasSscal, Float32), (:clblasDscal, Float64),
+                    (:clblasCscal, CL_float2), (:clblasZscal, CL_double2)]
+
+    @eval function scal!(n::Integer, DA::$typ,
+                         DX::CLArray{$typ}, incx::Integer;
+                         queue=cl.queue(DX))
+        return $func(Csize_t(n), DA,
+                     pointer(DX), Csize_t(0), Cint(incx),
+                     [queue])
+    end
+
+end
 
 
 
