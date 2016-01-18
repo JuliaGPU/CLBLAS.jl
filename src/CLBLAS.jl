@@ -7,8 +7,6 @@ export axpy!, scal!, gemm!
 import OpenCL
 const cl = OpenCL
 
-using Compat
-
 @unix_only const libCLBLAS = "libclBLAS"
 @windows_only const libCLBLAS = "clBLAS"
 
