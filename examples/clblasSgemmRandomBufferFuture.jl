@@ -1,6 +1,5 @@
 import CLBLAS
 import OpenCL
-using Compat
 
     const clblas = CLBLAS
     clblas.setup()

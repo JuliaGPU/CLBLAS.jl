@@ -1,23 +1,44 @@
 language: julia
+
 os:
   - linux
+
 julia:
   - release
+  - nightly
+
+env:
+  - CLBLAS=2.6 PATCH=0
+  - CLBLAS=2.8 PATCH=0
+
 notifications:
   email: false
+
+sudo: false
+
 before_install:
-  - if [ `uname` = "Linux" ]; then
-      sudo apt-get update -qq -y;
-      sudo apt-get install -qq fglrx opencl-headers;
-      wget https://github.com/clMathLibraries/clBLAS/releases/download/v2.6/clBLAS-2.6.0-Linux-x64.tar.gz;
-      tar -xf clBLAS-2.6.0-Linux-x64.tar.gz;
-      export LD_LIBRARY_PATH=/home/travis/build/JuliaGPU/CLBLAS.jl/clBLAS-2.6.0-Linux-x64/lib64:${LD_LIBRARY_PATH};
+  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+  - if [ $TRAVIS_OS_NAME = "linux" ]; then
+      bash .travis/amd_sdk.sh;
+      tar -xjf AMD-SDK.tar.bz2;
+      AMDAPPSDK=${HOME}/AMDAPPSDK;
+      export OPENCL_VENDOR_PATH=${AMDAPPSDK}/etc/OpenCL/vendors;
+      mkdir -p ${OPENCL_VENDOR_PATH};
+      sh AMD-APP-SDK*.sh --tar -xf -C ${AMDAPPSDK};
+      echo libamdocl64.so > ${OPENCL_VENDOR_PATH}/amdocl64.icd;
+      export LD_LIBRARY_PATH=${AMDAPPSDK}/lib/x86_64:${LD_LIBRARY_PATH};
     fi;
-  # - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+  - if [ $TRAVIS_OS_NAME = "linux" ]; then
+      wget https://github.com/clMathLibraries/clBLAS/releases/download/v${CLBLAS}/clBLAS-${CLBLAS}.${PATCH}-Linux-x64.tar.gz;
+      tar -xf clBLAS-${CLBLAS}.${PATCH}-Linux-x64.tar.gz;
+      export LD_LIBRARY_PATH=${HOME}/build/JuliaGPU/CLBLAS.jl/clBLAS-${CLBLAS}.${PATCH}-Linux-x64/lib64:${LD_LIBRARY_PATH};
+    fi;
 
 script:
-  - cd ${TRAVIS_BUILD_DIR}
-  - julia -e 'Pkg.add("OpenCL"); Pkg.checkout("OpenCL")'
-  - julia -e 'Pkg.add("CLBLAS"); Pkg.checkout("CLBLAS")'
-  # - julia -e 'Pkg.init(); run(`ln -s $(pwd()) $(Pkg.dir("CLBLAS"))`); Pkg.pin("CLBLAS"); Pkg.resolve()'
-  - julia test/runtests.jl
+  - julia -e 'Pkg.init(); Pkg.clone(pwd())'
+  - julia -e 'Pkg.checkout("OpenCL");'
+  - julia -e 'using CLBLAS; @assert isdefined(:CLBLAS); @assert typeof(CLBLAS) === Module'
+  - julia -e 'Pkg.test("CLBLAS")'
+
+# after_success:
+#   - julia -e 'Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())';
