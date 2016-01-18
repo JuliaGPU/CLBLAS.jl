@@ -100,16 +100,9 @@ macro blasfun2(expr)
     ex_body = quote
         local ctx = cl.info(inQueues[1], :context)
         local num_queues = cl.CL_uint(length(inQueues))
-
-        local num_events = cl.cl_uint(0)
-        local events = Ptr{Void}[]
-        if (inEvents != [])
-            num_events = cl.cl_uint(length(inEvents))
-            events = inEvents
-        end
-
-        local queues = Ptr{Void}[queue.id for queue in inQueues]
-        local ret_event = Array(cl.CL_event, 1)
+        local queues = cl.CL_command_queue[queue.id for queue in inQueues]
+        local num_events = cl.CL_uint(length(inEvents))
+        local ret_event = Ref{cl.CL_event}()
 
         # local err = $f($(args...), num_queues, pointer(queues), num_events,
         #                pointer(events), pointer(ret_event))
@@ -117,18 +110,18 @@ macro blasfun2(expr)
                                      cl.CL_int,
                                      ($(map(eval, types)...),
                                       # common types
-                                      Cuint, Ptr{Ptr{Void}},
-                                      Cuint, Ptr{Ptr{Void}},
-                                      Ptr{Ptr{Void}},),
+                                      Cuint, Ptr{cl.CL_command_queue},
+                                      Cuint, Ptr{cl.CL_event},
+                                      Ptr{cl.CL_event},),
                                      $(args...),
                                      # common params
-                                     num_queues, pointer(queues),
-                                     num_events, pointer(events),
-                                     pointer(ret_event))
+                                     num_queues, Ref(queues),
+                                     num_events, Ref(inEvents),
+                                     ret_event)
         if err != cl.CL_SUCCESS
             throw(cl.CLError(err))
         end
-        return cl.Event(ret_event[1], retain=false)
+        return cl.Event(ret_event[], retain=false)
     end
 
     push!(ex.args, ex_body)
