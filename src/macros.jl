@@ -99,11 +99,16 @@ macro blasfun2(expr)
 
     ex_body = quote
         local ctx = cl.info(inQueues[1], :context)
-        local num_queues = cl.CL_uint(length(inQueues))
         local queues = cl.CL_command_queue[queue.id for queue in inQueues]
+        local r_queues = Ref(queues)
+        local num_queues = cl.CL_uint(length(queues))
         local num_events = cl.CL_uint(length(inEvents))
         local events = num_events == 0 ? C_NULL : Ref(inEvents)
         local ret_event = Ref{cl.CL_event}()
+
+        @show num_queues
+        @show queues
+        @show r_queues
 
         # local err = $f($(args...), num_queues, pointer(queues), num_events,
         #                pointer(events), pointer(ret_event))
@@ -116,7 +121,7 @@ macro blasfun2(expr)
                                       Ptr{cl.CL_event},),
                                      $(args...),
                                      # common params
-                                     num_queues, Ref(queues),
+                                     num_queues, r_queues,
                                      num_events, events,
                                      ret_event)
         if err != cl.CL_SUCCESS
