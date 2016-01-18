@@ -4,65 +4,37 @@ os:
   - linux
 
 julia:
-  - 0.4
+  - release
   - nightly
 
 notifications:
   email: false
 
+sudo: false
+
 before_install:
-  - which julia
-  # - if [ $TRAVIS_OS_NAME = "linux" ]; then
-  - wget http://developer.amd.com/amd-license-agreement-appsdk/ --post-data "amd_developer_central_nonce=a244523dae&_wp_http_referer=/amd-license-agreement-appsdk/&f=QU1ELUFQUC1TREtJbnN0YWxsZXItdjMuMC4xMzAuMTM1LUdBLWxpbnV4NjQudGFyLmJ6Mg==" -O AMD-SDK.tar.bz2;
-  - ls;  
-  - tar -xjf AMD-SDK.tar.bz2;
-  - ls;
-  - mkdir AMD-APP-SDK;
-  - sh AMD-APP-SDK*.sh --tar -xf -C /home/travis/build/JuliaGPU/CLBLAS.jl/AMD-APP-SDK;
-  - export LD_LIBRARY_PATH=/home/travis/build/JuliaGPU/CLBLAS.jl/AMD-APP-SDK/lib/x86_64:${LD_LIBRARY_PATH};
-  #   fi;
-  - ls /home/travis/build/JuliaGPU/CLBLAS.jl;
-  - ls /home/travis/build/JuliaGPU/CLBLAS.jl/AMD-APP-SDK;
-  - ls /home/travis/build/JuliaGPU/CLBLAS.jl/AMD-APP-SDK/lib;
-  - ls /home/travis/build/JuliaGPU/CLBLAS.jl/AMD-APP-SDK/lib/x86_64;
-  - wget https://github.com/clMathLibraries/clBLAS/releases/download/v2.6/clBLAS-2.6.0-Linux-x64.tar.gz;
-  - tar -xf clBLAS-2.6.0-Linux-x64.tar.gz;
-  - export LD_LIBRARY_PATH=/home/travis/build/JuliaGPU/CLBLAS.jl/clBLAS-2.6.0-Linux-x64/lib64:${LD_LIBRARY_PATH};
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+  - if [ $TRAVIS_OS_NAME = "linux" ]; then
+      bash .travis/amd_sdk.sh;
+      tar -xjf AMD-SDK.tar.bz2;
+      AMDAPPSDK=${HOME}/AMDAPPSDK;
+      export OPENCL_VENDOR_PATH=${AMDAPPSDK}/etc/OpenCL/vendors;
+      mkdir -p ${OPENCL_VENDOR_PATH};
+      sh AMD-APP-SDK*.sh --tar -xf -C ${AMDAPPSDK};
+      echo libamdocl64.so > ${OPENCL_VENDOR_PATH}/amdocl64.icd;
+      export LD_LIBRARY_PATH=${AMDAPPSDK}/lib/x86_64:${LD_LIBRARY_PATH};
+    fi;
+  - if [ $TRAVIS_OS_NAME = "linux" ]; then
+      wget https://github.com/clMathLibraries/clBLAS/releases/download/v2.6/clBLAS-2.6.0-Linux-x64.tar.gz;
+      tar -xf clBLAS-2.6.0-Linux-x64.tar.gz;
+      export LD_LIBRARY_PATH=${HOME}/build/JuliaGPU/CLBLAS.jl/clBLAS-2.6.0-Linux-x64/lib64:${LD_LIBRARY_PATH};
+    fi;
 
 script:
   - julia -e 'Pkg.init(); Pkg.clone(pwd())'
   - julia -e 'Pkg.checkout("OpenCL");'
   - julia -e 'using CLBLAS; @assert isdefined(:CLBLAS); @assert typeof(CLBLAS) === Module'
-
-  - sudo -E /home/travis/julia/bin/julia -e "Pkg.test(\"OpenCL\")"
-  # - sudo -E /home/travis/julia/bin/julia -e "Pkg.test(\"CLBLAS\")"
-  # - julia test/runtests.jl
-
+  - julia -e 'Pkg.test("CLBLAS")'
 
 after_success:
-  - julia -e 'Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'; fi
-
-# language: julia
-# os:
-#   - linux
-# julia:
-#   - release
-# notifications:
-#   email: false
-# before_install:
-#   - if [ `uname` = "Linux" ]; then
-#       sudo apt-get update -qq -y;
-#       sudo apt-get install -qq fglrx opencl-headers;
-#       wget https://github.com/clMathLibraries/clBLAS/releases/download/v2.6/clBLAS-2.6.0-Linux-x64.tar.gz;
-#       tar -xf clBLAS-2.6.0-Linux-x64.tar.gz;
-#       export LD_LIBRARY_PATH=/home/travis/build/JuliaGPU/CLBLAS.jl/clBLAS-2.6.0-Linux-x64/lib64:${LD_LIBRARY_PATH};
-#     fi;
-#   # - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-
-# script:
-#   - cd ${TRAVIS_BUILD_DIR}
-#   - julia -e 'Pkg.add("OpenCL"); Pkg.checkout("OpenCL")'
-#   - julia -e 'Pkg.add("CLBLAS"); Pkg.checkout("CLBLAS")'
-#   # - julia -e 'Pkg.init(); run(`ln -s $(pwd()) $(Pkg.dir("CLBLAS"))`); Pkg.pin("CLBLAS"); Pkg.resolve()'
-#   - julia test/runtests.jl
+  - julia -e 'Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())';
