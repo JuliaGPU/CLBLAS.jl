@@ -2,7 +2,7 @@ facts("CLBLAS.L1") do
     context("CLBLAS axpy") do
         for T in [Float32,
                   Float64,
-                  # Complex64,
+                  Complex64,
                   Complex128]
             alpha = T(2.0)
             hx = rand(T, 32)
@@ -20,7 +20,7 @@ facts("CLBLAS.L1") do
     context("CLBLAS scal") do
         for T in [Float32,
                   Float64,
-                  # Complex64,
+                  Complex64,
                   Complex128]
 
             n = 32

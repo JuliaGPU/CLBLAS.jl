@@ -2,7 +2,7 @@ facts("CLBLAS.L1") do
     context("CLBLAS gemm") do
         for T in [Float32,
                   Float64,
-                  # Complex64,
+                  Complex64,
                   Complex128]
             alpha = T(2.0)
             beta = T(0.0)
