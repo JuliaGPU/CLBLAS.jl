@@ -1,15 +1,19 @@
+module TestCLBLAS
+  using FactCheck
+  using Base.Test
 
-import OpenCL: CLArray
-const cl = OpenCL
-using CLBLAS
+  import OpenCL
+  import OpenCL: CLArray
+  const cl = OpenCL
+  using CLBLAS
 
+  FactCheck.onlystats(true)
 
-CLBLAS.setup()
+  CLBLAS.setup()
+  dev, ctx, q = cl.create_compute_context()
 
-dev, ctx, q = cl.create_compute_context()
+  include("test_l1.jl")
+  include("test_l3.jl")
 
-include("test_l1.jl")
-
-include("test_l3.jl")
-
-println("Ok.")
+  FactCheck.exitstatus()
+end
