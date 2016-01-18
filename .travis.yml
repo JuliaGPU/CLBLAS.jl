@@ -7,6 +7,10 @@ julia:
   - release
   - nightly
 
+env:
+  - CLBLAS=2.6 PATCH=0
+  - CLBLAS=2.8 PATCH=0
+
 notifications:
   email: false
 
@@ -25,9 +29,9 @@ before_install:
       export LD_LIBRARY_PATH=${AMDAPPSDK}/lib/x86_64:${LD_LIBRARY_PATH};
     fi;
   - if [ $TRAVIS_OS_NAME = "linux" ]; then
-      wget https://github.com/clMathLibraries/clBLAS/releases/download/v2.6/clBLAS-2.6.0-Linux-x64.tar.gz;
-      tar -xf clBLAS-2.6.0-Linux-x64.tar.gz;
-      export LD_LIBRARY_PATH=${HOME}/build/JuliaGPU/CLBLAS.jl/clBLAS-2.6.0-Linux-x64/lib64:${LD_LIBRARY_PATH};
+      wget https://github.com/clMathLibraries/clBLAS/releases/download/v${CLBLAS}/clBLAS-${CLBLAS}.${PATCH}-Linux-x64.tar.gz;
+      tar -xf clBLAS-${CLBLAS}.${PATCH}-Linux-x64.tar.gz;
+      export LD_LIBRARY_PATH=${HOME}/build/JuliaGPU/CLBLAS.jl/clBLAS-${CLBLAS}.${PATCH}-Linux-x64/lib64:${LD_LIBRARY_PATH};
     fi;
 
 script:
