@@ -100,8 +100,9 @@ macro blasfun2(expr)
     ex_body = quote
         local ctx = cl.info(inQueues[1], :context)
         local queues = cl.CL_command_queue[queue.id for queue in inQueues]
-        local r_queues = Ref(queues)
         local num_queues = cl.CL_uint(length(queues))
+        local r_queues = num_queues == 0 ? C_NULL : Ref(queues)
+
         local num_events = cl.CL_uint(length(inEvents))
         local events = num_events == 0 ? C_NULL : Ref(inEvents)
         local ret_event = Ref{cl.CL_event}()
