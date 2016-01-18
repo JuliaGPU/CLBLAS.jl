@@ -102,6 +102,7 @@ macro blasfun2(expr)
         local num_queues = cl.CL_uint(length(inQueues))
         local queues = cl.CL_command_queue[queue.id for queue in inQueues]
         local num_events = cl.CL_uint(length(inEvents))
+        local events = num_events == 0 ? C_NULL : Ref(inEvents)
         local ret_event = Ref{cl.CL_event}()
 
         # local err = $f($(args...), num_queues, pointer(queues), num_events,
@@ -116,7 +117,7 @@ macro blasfun2(expr)
                                      $(args...),
                                      # common params
                                      num_queues, Ref(queues),
-                                     num_events, Ref(inEvents),
+                                     num_events, events,
                                      ret_event)
         if err != cl.CL_SUCCESS
             throw(cl.CLError(err))
