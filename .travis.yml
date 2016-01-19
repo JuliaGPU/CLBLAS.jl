@@ -10,6 +10,7 @@ julia:
 env:
   - CLBLAS=2.6 PATCH=0
   - CLBLAS=2.8 PATCH=0
+  - CLBLAS=git
 
 notifications:
   email: false
@@ -28,10 +29,18 @@ before_install:
       echo libamdocl64.so > ${OPENCL_VENDOR_PATH}/amdocl64.icd;
       export LD_LIBRARY_PATH=${AMDAPPSDK}/lib/x86_64:${LD_LIBRARY_PATH};
     fi;
-  - if [ $TRAVIS_OS_NAME = "linux" ]; then
+  - if [ $TRAVIS_OS_NAME = "linux" && $CLBLAS != "git" ]; then
       wget https://github.com/clMathLibraries/clBLAS/releases/download/v${CLBLAS}/clBLAS-${CLBLAS}.${PATCH}-Linux-x64.tar.gz;
       tar -xf clBLAS-${CLBLAS}.${PATCH}-Linux-x64.tar.gz;
       export LD_LIBRARY_PATH=${HOME}/build/JuliaGPU/CLBLAS.jl/clBLAS-${CLBLAS}.${PATCH}-Linux-x64/lib64:${LD_LIBRARY_PATH};
+    else
+      git clone https://github.com/clMathLibraries/clBLAS.git;
+      mkdir -p clBLAS/build;
+      cd clBLAS/build;
+      cmake ../src -DBUILD_KTEST=OFF -DBUILD_TEST=OFF -DCMAKE_BUILD_TYPE=Release;
+      make;
+      cd ../..;
+      export LD_LIBRARY_PATH=${HOME}/build/JuliaGPU/CLBLAS.jl/clBLAS/build/library:${LD_LIBRARY_PATH};
     fi;
 
 script:
