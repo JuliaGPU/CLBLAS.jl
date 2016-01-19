@@ -37,7 +37,7 @@ before_install:
       git clone https://github.com/clMathLibraries/clBLAS.git;
       mkdir -p clBLAS/build;
       cd clBLAS/build;
-      cmake ../src -DBUILD_KTEST=OFF -DBUILD_TEST=OFF -DCMAKE_BUILD_TYPE=Release;
+      cmake ../src -DBUILD_KTEST=OFF -DBUILD_TEST=OFF -DCMAKE_BUILD_TYPE=Debug;
       make;
       cd ../..;
       export LD_LIBRARY_PATH=${HOME}/build/JuliaGPU/CLBLAS.jl/clBLAS/build/library:${LD_LIBRARY_PATH};
