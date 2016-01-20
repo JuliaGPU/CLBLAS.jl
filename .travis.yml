@@ -21,25 +21,38 @@ addons:
     sources:
       - llvm-toolchain-precise-3.7
     packages:
+      - cmake
+      - gcc-4.9
+      - g++-4.9
       - llvm-3.7-dev
       - llvm-3.7
-      - ocl-icd
 
 before_install:
-  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fiS
+  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then export CC="gcc-4.9"; export CXX="g++-4.9"; fi
   - if [ $TRAVIS_OS_NAME = "linux" ]; then
-      export POCL=pocl-0.12;
+      POCL=pocl-0.12;
+      ICD=ocl-icd-2.2.8;
       export AMDAPPSDKROOT=${HOME}/opencl;
       mkdir -p ${AMDAPPSDKROOT};
+
+      export OPENCL_VENDOR_PATH=${AMDAPPSDKROOT}/etc/OpenCL/vendors;
+      export LD_LIBRARY_PATH=${AMDAPPSDKROOT}/lib:${LD_LIBRARY_PATH};
+
+      wget https://forge.imag.fr/frs/download.php/698/${ICD}.tar.gz;
+      tar -xf ${ICD}.tar.gz;
+      cd ${ICD};
+      ./configure --prefix=${AMDAPPSDKROOT};
+      make && make install;
+      cd ..
+
 
       wget http://portablecl.org/downloads/${POCL}.tar.gz;
       tar -xf ${POCL}.tar.gz;
       cd ${POCL};
       cmake . -DCMAKE_INSTALL_PREFIX:PATH=${AMDAPPSDKROOT};
       make install;
-
-      export OPENCL_VENDOR_PATH=${AMDAPPSDKROOT}/etc/OpenCL/vendors;
-      export LD_LIBRARY_PATH=${AMDAPPSDKROOT}/lib:${LD_LIBRARY_PATH};
+      cd ..;
     fi;
   - if [ $TRAVIS_OS_NAME = "linux" ]; then
       wget https://github.com/clMathLibraries/clBLAS/releases/download/v${CLBLAS}/clBLAS-${CLBLAS}.${PATCH}-Linux-x64.tar.gz;
