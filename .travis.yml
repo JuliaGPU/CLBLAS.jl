@@ -16,21 +16,35 @@ notifications:
 
 sudo: false
 
+addons:
+  apt:
+    sources:
+      - llvm-toolchain-precise-3.7
+    packages:
+      - llvm-3.7-dev
+      - llvm-3.7
+      - ocl-icd
+
 before_install:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
   - if [ $TRAVIS_OS_NAME = "linux" ]; then
-      bash .travis/amd_sdk.sh;
-      tar -xjf AMD-SDK.tar.bz2;
-      AMDAPPSDK=${HOME}/AMDAPPSDK;
-      export OPENCL_VENDOR_PATH=${AMDAPPSDK}/etc/OpenCL/vendors;
-      mkdir -p ${OPENCL_VENDOR_PATH};
-      sh AMD-APP-SDK*.sh --tar -xf -C ${AMDAPPSDK};
-      echo libamdocl64.so > ${OPENCL_VENDOR_PATH}/amdocl64.icd;
-      export LD_LIBRARY_PATH=${AMDAPPSDK}/lib/x86_64:${LD_LIBRARY_PATH};
+      export POCL=pocl-0.12;
+      export AMDAPPSDKROOT=${HOME}/opencl;
+      mkdir -p ${AMDAPPSDKROOT};
+
+      wget http://portablecl.org/downloads/${POCL}.tar.gz;
+      tar -xf ${POCL}.tar.gz;
+      cd ${POCL};
+      cmake . -DCMAKE_INSTALL_PREFIX:PATH=${AMDAPPSDKROOT};
+      make install;
+
+      export OPENCL_VENDOR_PATH=${AMDAPPSDKROOT}/etc/OpenCL/vendors;
+      export LD_LIBRARY_PATH=${AMDAPPSDKROOT}/lib:${LD_LIBRARY_PATH};
     fi;
   - if [ $TRAVIS_OS_NAME = "linux" ]; then
       wget https://github.com/clMathLibraries/clBLAS/releases/download/v${CLBLAS}/clBLAS-${CLBLAS}.${PATCH}-Linux-x64.tar.gz;
       tar -xf clBLAS-${CLBLAS}.${PATCH}-Linux-x64.tar.gz;
+      echo ${TRAVIS_BUILD_DIR};
       export LD_LIBRARY_PATH=${HOME}/build/JuliaGPU/CLBLAS.jl/clBLAS-${CLBLAS}.${PATCH}-Linux-x64/lib64:${LD_LIBRARY_PATH};
     fi;
 
