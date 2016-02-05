@@ -37,3 +37,7 @@ else
     error("Results diverged")
 end
 ```
+
+## Caveats
+
+ * `Complex64`/`CL_float2` doesn't work by default. This is caused by some weird incompatibility between clang (default for Julia) and gcc (default for clBLAS), so the only way to fix it right now is to manually compile clBLAS using clang, 
