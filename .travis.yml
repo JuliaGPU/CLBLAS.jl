@@ -20,7 +20,7 @@ apt:
 
 before_install:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - export CC=clang; export CXX=clang++;
+  - export CC=clang-3.7; export CXX=clang++-3.7;
   - bash .travis/amd_sdk.sh;
     tar -xjf AMD-SDK.tar.bz2;
     AMDAPPSDK=${HOME}/AMDAPPSDK;
