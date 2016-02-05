@@ -12,11 +12,12 @@ notifications:
 
 sudo: false
 
-apt:
-  sources:
-    - llvm-toolchain-precise-3.7
-  packages:
-    - clang-3.7
+addons:
+  apt:
+    sources:
+      - llvm-toolchain-precise-3.7
+    packages:
+      - clang-3.7
 
 before_install:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
