@@ -1,5 +1,4 @@
-import OpenCL
-const cl = OpenCL
+import OpenCL.cl
 
 for (func, typ) in [(:clblasSgemm, cl.CL_float),
                     (:clblasDgemm, cl.CL_double),

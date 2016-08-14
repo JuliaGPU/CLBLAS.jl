@@ -4,8 +4,7 @@ module CLBLAS
 export axpy!, scal!, gemm!
 
 # why there is a type assertion at context.jl line 38
-import OpenCL
-const cl = OpenCL
+import OpenCL.cl
 
 @unix_only const libCLBLAS = "libclBLAS"
 @windows_only const libCLBLAS = "clBLAS"
