@@ -4,8 +4,7 @@ os:
   - linux
 
 julia:
-  - release
-  - nightly
+  - 0.5
 
 env:
   - CLBLAS=2.6 PATCH=0

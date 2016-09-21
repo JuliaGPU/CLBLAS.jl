@@ -1,9 +1,8 @@
 import CLBLAS
-import OpenCL
+import OpenCL.cl
 
     const clblas = CLBLAS
-    clblas.setup()
-    const cl = OpenCL
+    clblas.setup()    
     alpha = cl.cl_float(5)
     beta = cl.cl_float(2)
     # Order of the square matrices A, B and C

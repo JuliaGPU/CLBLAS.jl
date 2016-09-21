@@ -1,19 +1,19 @@
-import OpenCL
+import OpenCL.cl
 
 typealias CL_float2 Complex64
 typealias CL_double2 Complex128
 
 
-clblasInvalidCommandQueue             = OpenCL.CL_INVALID_COMMAND_QUEUE
-clblasInvalidContext                  = OpenCL.CL_INVALID_CONTEXT
-clblasInvalidMemObject                = OpenCL.CL_INVALID_MEM_OBJECT
-clblasInvalidDevice                   = OpenCL.CL_INVALID_DEVICE
-clblasInvalidEventWaitList            = OpenCL.CL_INVALID_EVENT_WAIT_LIST
-clblasOutOfResources                  = OpenCL.CL_OUT_OF_RESOURCES
-clblasOutOfHostMemory                 = OpenCL.CL_OUT_OF_HOST_MEMORY
-clblasInvalidOperation                = OpenCL.CL_INVALID_OPERATION
-clblasCompilerNotAvailable            = OpenCL.CL_COMPILER_NOT_AVAILABLE
-clblasBuildProgramFailure             = OpenCL.CL_BUILD_PROGRAM_FAILURE
+clblasInvalidCommandQueue             = cl.CL_INVALID_COMMAND_QUEUE
+clblasInvalidContext                  = cl.CL_INVALID_CONTEXT
+clblasInvalidMemObject                = cl.CL_INVALID_MEM_OBJECT
+clblasInvalidDevice                   = cl.CL_INVALID_DEVICE
+clblasInvalidEventWaitList            = cl.CL_INVALID_EVENT_WAIT_LIST
+clblasOutOfResources                  = cl.CL_OUT_OF_RESOURCES
+clblasOutOfHostMemory                 = cl.CL_OUT_OF_HOST_MEMORY
+clblasInvalidOperation                = cl.CL_INVALID_OPERATION
+clblasCompilerNotAvailable            = cl.CL_COMPILER_NOT_AVAILABLE
+clblasBuildProgramFailure             = cl.CL_BUILD_PROGRAM_FAILURE
 clblasNotImplemented                  = -1024
 clblasNotInitialized                  = -1023
 clblasInvalidMatA                     = -1022

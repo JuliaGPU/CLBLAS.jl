@@ -2,9 +2,8 @@ module TestCLBLAS
   using FactCheck
   using Base.Test
 
-  import OpenCL
-  import OpenCL: CLArray
-  const cl = OpenCL
+  import OpenCL.cl
+  import OpenCL.cl.CLArray
   using CLBLAS
 
   FactCheck.onlystats(true)

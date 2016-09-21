@@ -1,10 +1,9 @@
 import CLBLAS
-import OpenCL
+import OpenCL.cl
 
     const clblas = CLBLAS
     clblas.setup()
     
-    const cl = OpenCL
 
     device, ctx, queue = clblas.get_next_compute_context()
 

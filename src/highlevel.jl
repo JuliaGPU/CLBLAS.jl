@@ -1,5 +1,5 @@
 
-import OpenCL.CLArray
+import OpenCL.cl.CLArray
 import Base.LinAlg.BLAS: axpy!, scal!, gemm!
 
 #### common stuff

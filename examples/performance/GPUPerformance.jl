@@ -1,7 +1,6 @@
 import CLBLAS
-import OpenCL
+import OpenCL.cl
 
-const cl = OpenCL
 const clblas = CLBLAS
 
 
