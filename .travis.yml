@@ -5,6 +5,7 @@ os:
 
 julia:
   - 0.5
+  - nightly
 
 env:
   - CLBLAS=2.6 PATCH=0
