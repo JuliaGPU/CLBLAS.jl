@@ -6,8 +6,8 @@ export axpy!, scal!, gemm!
 # why there is a type assertion at context.jl line 38
 import OpenCL.cl
 
-@unix_only const libCLBLAS = "libclBLAS"
-@windows_only const libCLBLAS = "clBLAS"
+@static if is_unix() const libCLBLAS = "libclBLAS" end
+@static if is_windows() const libCLBLAS = "clBLAS" end
 
 include("constants.jl")
 include("macros.jl")
@@ -30,7 +30,7 @@ end
 #destroy
 @blasfun clblasTeardown()
 
-global compute_context_holder = Array(Tuple, 0)
+global compute_context_holder = Array{Tuple}(0)
 global next_compute_context = -1
 global setup_called = false
 
@@ -53,7 +53,7 @@ function setup(profile=false)
         throw(cl.OpenCLException("No OpenCL.Platform available"))
     end
     #TODO: osx only due to https://github.com/clMathLibraries/clBLAS/issues/25
-    available_devices = @osx ? cl.devices(:gpu) : cl.devices()
+    available_devices = @static if is_apple() cl.devices(:gpu) else cl.devices() end
     if isempty(available_devices)
         throw(cl.OpenCLException("Unable to create any OpenCL.Context, no available devices"))
     end
