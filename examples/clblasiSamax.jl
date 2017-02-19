@@ -1,52 +1,51 @@
 import CLBLAS
-import OpenCL
 
-    const clblas = CLBLAS
-    clblas.setup()
-    
-    const cl = OpenCL
+const clblas = CLBLAS
+clblas.setup()
 
-    device, ctx, queue = clblas.get_next_compute_context()
+using OpenCL: cl
 
-    N = unsigned(5)
-    data = Array(Float32, 5)
-    
-    data[1] = 5.55555
-    data[2] = 3.333
-    data[3] = 2.22
-    data[4] = 4.4444
-    data[5] = 1.1
+device, ctx, queue = clblas.get_next_compute_context()
 
-    bufX = cl.Buffer(Float32, ctx, (:r, :copy),hostbuf=data)
-    scratchBuff = cl.Buffer(Float32, ctx, :rw, 2 * length(data))
-    iMax = cl.Buffer(cl.CL_uint, ctx, :w, 1)
+N = Unsigned(5)
+data = Vector{Float32}(5)
 
-    offiMax = offx = unsigned(0)
-    incx = cl.cl_int(1)
-    ncq = cl.cl_uint(1)
-    clq = queue.id
-    newl = cl.cl_uint(0)
+data[1] = 5.55555
+data[2] = 3.333
+data[3] = 2.22
+data[4] = 4.4444
+data[5] = 1.1
 
-    event = cl.UserEvent(ctx, retain=true)
-    ptrEvent = [event.id]
+bufX = cl.Buffer(Float32, ctx, (:r, :copy),hostbuf=data)
+scratchBuff = cl.Buffer(Float32, ctx, :rw, 2 * length(data))
+iMax = cl.Buffer(cl.CL_uint, ctx, :w, 1)
 
-    clblas.clblasiSamax( N, iMax.id, offiMax, bufX.id, offx, incx, scratchBuff.id, ncq, [clq], newl, C_NULL, ptrEvent);
+offiMax = offx = Unsigned(0)
+incx = cl.cl_int(1)
+ncq = cl.cl_uint(1)
+clq = queue.id
+newl = cl.cl_uint(0)
 
-    cl.api.clWaitForEvents(cl.cl_uint(1), ptrEvent)
+event = cl.UserEvent(ctx, retain=true)
+ptrEvent = [event.id]
 
-    result = Array(cl.CL_uint, 1)
-    cl.enqueue_read_buffer(queue, iMax, result, unsigned(0), nothing, true)
-    
-    result = int(floor(result[1])) 
+clblas.clblasiSamax( N, iMax.id, offiMax, bufX.id, offx, incx, scratchBuff.id, ncq, [clq], newl, C_NULL, ptrEvent);
 
-    expected = float32(5.55555) 
-    println(data[result])
-    println("------------")
-    println(expected)
+cl.api.clWaitForEvents(cl.cl_uint(1), ptrEvent)
 
-    try
-        @assert(isapprox(norm(expected - data[result]), zero(Float32)))
-        info("success!")
-    finally
-        clblas.teardown()
-    end
+result = Array(cl.CL_uint, 1)
+cl.enqueue_read_buffer(queue, iMax, result, Unsigned(0), nothing, true)
+
+result = int(floor(result[1]))
+
+expected = float32(5.55555)
+println(data[result])
+println("------------")
+println(expected)
+
+try
+    @assert(isapprox(norm(expected - data[result]), zero(Float32)))
+    info("success!")
+finally
+    clblas.teardown()
+end

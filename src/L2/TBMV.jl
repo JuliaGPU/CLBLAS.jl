@@ -1,6 +1,5 @@
-
 for func in [:clblasStbmv, :clblasDtbmv, :clblasCtbmv, :clblasZtbmv]
-    
+
     @eval @blasfun $func(order::clblasOrder, uplo::clblasUplo,
                               trans::clblasTranspose, diag::clblasDiag,
                               N::Csize_t, K::Csize_t,
@@ -19,5 +18,5 @@ for func in [:clblasStbmv, :clblasDtbmv, :clblasCtbmv, :clblasZtbmv]
                                A::cl.CL_mem, offa::Csize_t, lda::Csize_t,
                                X::cl.CL_mem, offx::Csize_t, incx::Cint,
                                scratch_buff::cl.CL_mem)
-    
+
 end

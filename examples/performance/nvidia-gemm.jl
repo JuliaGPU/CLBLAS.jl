@@ -48,8 +48,8 @@ import OpenCL.cl
     evt = mmul[queue, (Ndim, Mdim), (blocksize, blocksize)](Mdim, Ndim, alpha, beta, d_c, d_a, d_b, localmem1, localmem2)
     cl.api.clWaitForEvents(cl.cl_uint(1), pointer([pointer(evt)]))
 
-    result = Array(Float32, 512 * 512)
-    cl.enqueue_read_buffer(queue, d_c, result, unsigned(0), nothing, true)
+    result = Vector{Float32}(512 * 512)
+    cl.enqueue_read_buffer(queue, d_c, result, Unsigned(0), nothing, true)
     result = reshape(result, (Ndim, Mdim))
 
     println(result)

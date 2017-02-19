@@ -4,14 +4,14 @@ import OpenCL
     const clblas = CLBLAS
     clblas.setup(true)
     
-    const cl = OpenCL
+    using OpenCL: cl
 
     device, ctx, queue = clblas.get_next_compute_context()
 
-    N = unsigned(5)
+    N = Unsigned(5)
     alpha1 = cl.cl_float(5)
     alpha2 = cl.cl_float(2)
-    data = Array(Float32, 5)
+    data = Vector{Float32}(5)
     data[1] = 0.1
     data[2] = 0.22
     data[3] = 0.333
@@ -19,7 +19,7 @@ import OpenCL
     data[5] = 0.55555
 
     X = cl.Buffer(Float32, ctx, (:rw, :copy), hostbuf=data)
-    offx = unsigned(0)
+    offx = Unsigned(0)
     incx = cl.cl_int(1)
     ncq = cl.cl_uint(1)
     clq = queue.id
@@ -35,8 +35,8 @@ import OpenCL
 
     cl.api.clWaitForEvents(cl.cl_uint(1), ptrEvent2)
 
-    result = Array(Float32, length(X))
-    cl.enqueue_read_buffer(queue, X, result, unsigned(0), nothing, true)
+    result = Vector{Float32}(length(X))
+    cl.enqueue_read_buffer(queue, X, result, Unsigned(0), nothing, true)
     
     expected = data * alpha1 * alpha2
     println(result)

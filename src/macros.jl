@@ -47,10 +47,19 @@ macro blasfun(expr)
     ex_fun = Expr(:(call))
     push!(ex_fun.args, f)
     for (arg, typ) in zip(args, types)
-        var_ex = Expr(:(::))
-        push!(var_ex.args, arg)
-        push!(var_ex.args, typ)
-        push!(ex_fun.args, var_ex)
+        # widen type for numbers (Int32 -> Integer)
+        # let ccall handle these conversions!
+        typ = if typ in (:(cl.CL_uint), :Csize_t)
+            :Integer
+        elseif typ == :Float32
+            :AbstractFloat
+        elseif contains(string(typ), "Ptr") # pointer should be handled by ccall as well
+            :Any
+        else
+            typ
+        end
+
+        push!(ex_fun.args, :($arg::$typ))
     end
     push!(ex.args, ex_fun)
 
