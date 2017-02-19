@@ -9,7 +9,7 @@ macro checked_lib(libname, path)
 end
 
 # Load dependencies
-@checked_lib libCLBLAS "C:\\Users\\Sim\\Downloads\\CLBLAS\\package\\bin\\clBLAS.DLL"
+@checked_lib libCLBLAS "C:\\Users\\Sim\\.julia\\v0.5\\CLBLAS\\deps\\package\\bin\\clBLAS.DLL"
 
 # Load-hooks
 
