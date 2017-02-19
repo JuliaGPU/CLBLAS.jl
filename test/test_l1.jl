@@ -1,9 +1,7 @@
-facts("CLBLAS.L1") do
-    context("CLBLAS axpy") do
-        for T in [Float32,
-                  Float64,
-                  # Complex64,
-                  Complex128]
+@testset "CLBLAS.L1" begin
+    @testset "CLBLAS axpy" begin
+        for T in testtypes
+            println(T)
             alpha = T(2.0)
             hx = rand(T, 32)
             hy = rand(T, 32)
@@ -13,11 +11,11 @@ facts("CLBLAS.L1") do
             cl.wait(axpy!(alpha, x, y; queue = q))
             axpy!(alpha, hx, hy)
 
-            @fact cl.to_host(y) --> roughly(hy)
+            @test cl.to_host(y) ≈ hy
         end
     end
 
-    context("CLBLAS scal") do
+    @testset "CLBLAS scal" begin
         for T in [Float32,
                   Float64,
                   # Complex64,
@@ -32,7 +30,7 @@ facts("CLBLAS.L1") do
             cl.wait(scal!(n, DA, DX, incx; queue=q))
             scal!(n, DA, hDX, incx)
 
-            @fact cl.to_host(DX) --> roughly(hDX)
+            @test cl.to_host(DX) ≈ hDX
         end
     end
 end
