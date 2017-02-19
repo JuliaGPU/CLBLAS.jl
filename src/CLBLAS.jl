@@ -1,14 +1,15 @@
 module CLBLAS
 
+using OpenCL: cl
+
 export axpy!, scal!, gemm!
 
 # why there is a type assertion at context.jl line 38
-import OpenCL.cl
-
-if is_unix()
-    const libCLBLAS = "libclBLAS"
+depsfile = joinpath(dirname(@__FILE__), "..", "deps", "deps.jl")
+if isfile(depsfile)
+    include(depsfile)
 else
-    const libCLBLAS = "clBLAS"
+    error("CLBLAS not properly installed. Please run Pkg.build(\"CLBLAS\") then restart Julia.") # now that this is decoupled from images, should this be an error?
 end
 
 include("constants.jl")

@@ -10,7 +10,7 @@ facts("CLBLAS.L1") do
             x = CLArray(q, hx)
             y = CLArray(q, hy)
 
-            cl.wait(axpy!(alpha, x, y; queue=q))
+            cl.wait(axpy!(alpha, x, y; queue = q))
             axpy!(alpha, hx, hy)
 
             @fact cl.to_host(y) --> roughly(hy)
@@ -36,4 +36,3 @@ facts("CLBLAS.L1") do
         end
     end
 end
-
