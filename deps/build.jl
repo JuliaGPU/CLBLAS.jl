@@ -1,6 +1,6 @@
 using BinDeps
 @BinDeps.setup
-libnames = ["libCLBLAS", "clBLAS"]
+libnames = ["libCLBLAS", "clBLAS", "libclBLAS"]
 libCLBLAS = library_dependency("libCLBLAS", aliases = libnames)
 archive = "package"
 libpath = "package/bin"
@@ -21,7 +21,7 @@ baseurl = "https://github.com/clMathLibraries/clBLAS/releases/download/v2.12/clB
 end
 
 @static if is_linux()
-    provides(AptGet, "libblas-dev", libCLBLAS)
+    provides(AptGet, "libclblas-dev", libCLBLAS)
     if Sys.ARCH == :x86_64
         uri = URI(baseurl * "Linux-x64.tar.gz")
         provides(
