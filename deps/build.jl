@@ -7,7 +7,7 @@ libpath = "package/bin"
 baseurl = "https://github.com/clMathLibraries/clBLAS/releases/download/v2.12/clBLAS-2.12.0-"
 
 # download a pre-compiled binary (built by GLFW)
-@static if is_windows()
+if is_windows()
     if Sys.ARCH == :x86_64
         uri = URI(baseurl * "Windows-x64.zip")
         provides(
@@ -20,7 +20,7 @@ baseurl = "https://github.com/clMathLibraries/clBLAS/releases/download/v2.12/clB
     end
 end
 
-@static if is_linux()
+if is_linux()
     provides(AptGet, "libclblas-dev", libCLBLAS)
     if Sys.ARCH == :x86_64
         uri = URI(baseurl * "Linux-x64.tar.gz")
