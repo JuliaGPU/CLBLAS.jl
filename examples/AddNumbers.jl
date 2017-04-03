@@ -1,9 +1,9 @@
 import OpenCL
-const cl = OpenCL
+using OpenCL: cl
 
 const ARRAY_SIZE = 64
-sum = Array(Float32, 2)
-data = Array(Float32, ARRAY_SIZE)
+sum = Vector{Float32}(2)
+data = Vector{Float32}(ARRAY_SIZE)
 for i in 1:ARRAY_SIZE
    data[i] = i*1.0
 end

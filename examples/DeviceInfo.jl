@@ -1,7 +1,5 @@
 import CLBLAS
-import OpenCL
-
-const cl = OpenCL
+using OpenCL: cl
 const clblas = CLBLAS
 
 for platform in cl.platforms()

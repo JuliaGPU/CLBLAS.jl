@@ -3,7 +3,7 @@ for (func, typ) in [(:clblasSgemv, cl.CL_float),
                     (:clblasDgemv, cl.CL_double),
                     (:clblasCgemv, CL_float2),
                     (:clblasZgemv, CL_double2)]
-    
+
     @eval @blasfun $func(order::clblasOrder, transA::clblasTranspose,
                               M::Csize_t, N::Csize_t,
                               alpha::$typ,
@@ -24,5 +24,5 @@ for (func, typ) in [(:clblasSgemv, cl.CL_float),
                               X::cl.CL_mem, offx::Csize_t, incx::Cint,
                               beta::$typ,
                               y::cl.CL_mem, offy::Csize_t, incy::Cint)
-    
+
 end

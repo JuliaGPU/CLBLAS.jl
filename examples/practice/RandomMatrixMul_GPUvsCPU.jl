@@ -201,7 +201,7 @@ end
 
 const clblas = CLBLAS
 clblas.setup(true)
-const cl = OpenCL
+using OpenCL: cl
 
 for platform in cl.platforms()
     if platform[:name] == "Portable Computing Language"

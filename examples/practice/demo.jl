@@ -1,5 +1,5 @@
 import OpenCL
-const cl = OpenCL
+using OpenCL: cl
 
 const sum_kernel_src = "
    __kernel void sum(__global const float *a,

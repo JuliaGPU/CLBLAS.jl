@@ -2,7 +2,7 @@ using CLBLAS
 const clblas = CLBLAS
 
 import OpenCL
-const cl = OpenCL
+using OpenCL: cl
 
 function testDirectCall()
         device, ctx, queue = clblas.get_next_compute_context()
@@ -35,8 +35,8 @@ function testDirectCall()
         cl.api.clWaitForEvents(cl.cl_uint(1), ptrEvent)
 
         println("wait was ok")
-        result = Array(Float32, 1)
-        cl.enqueue_read_buffer(queue, bufC, result, unsigned(0), nothing, true)
+        result = Vector{Float32}(1)
+        cl.enqueue_read_buffer(queue, bufC, result, Unsigned(0), nothing, true)
         println("read was ok")
         println(result[1])
 
@@ -87,7 +87,7 @@ function testRand(x, y)
     println("Rand took:", (endT - startT)/1000000)
 end
 
-#result = Array(Float32, length(futBuf.resultMem))
-#cl.enqueue_read_buffer(futBuf.queue, futBuf.resultMem, result, unsigned(0), nothing, true)
+#result = Vector{Float32}(length(futBuf.resultMem))
+#cl.enqueue_read_buffer(futBuf.queue, futBuf.resultMem, result, Unsigned(0), nothing, true)
 #println(result)
 

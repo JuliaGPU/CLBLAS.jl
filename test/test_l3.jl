@@ -1,9 +1,6 @@
-facts("CLBLAS.L1") do
-    context("CLBLAS gemm") do
-        for T in [Float32,
-                  Float64,
-                  # Complex64,
-                  Complex128]
+@testset "CLBLAS.L1" begin
+    @testset "CLBLAS gemm" begin
+        for T in testtypes
             alpha = T(2.0)
             beta = T(0.0)
             hA = rand(T, 64, 32)
@@ -16,7 +13,7 @@ facts("CLBLAS.L1") do
             cl.wait(gemm!('N', 'N', alpha, A, B, beta, C; queue=q))
             gemm!('N', 'N', alpha, hA, hB, beta, hC)
 
-            @fact cl.to_host(C) --> roughly(hC)
+            @test cl.to_host(C) ≈ hC
         end
     end
 end

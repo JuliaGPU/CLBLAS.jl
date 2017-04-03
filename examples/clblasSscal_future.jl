@@ -3,9 +3,9 @@ import OpenCL
 
     const clblas = CLBLAS
     clblas.setup()
-    const cl = OpenCL
+    using OpenCL: cl
     alpha = cl.cl_float(10)
-    data = Array(Float32, 5)
+    data = Vector{Float32}(5)
     data[1] = 0.1
     data[2] = 0.22
     data[3] = 0.333

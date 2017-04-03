@@ -47,10 +47,18 @@ macro blasfun(expr)
     ex_fun = Expr(:(call))
     push!(ex_fun.args, f)
     for (arg, typ) in zip(args, types)
-        var_ex = Expr(:(::))
-        push!(var_ex.args, arg)
-        push!(var_ex.args, typ)
-        push!(ex_fun.args, var_ex)
+        # widen type for numbers (Int32 -> Integer)
+        # let ccall handle these conversions!
+        T = eval(typ)
+        typ = if T <: Integer
+            :Integer
+        elseif contains(string(typ), "Ptr") # pointer should be handled by ccall as well
+            :Any
+        else
+            typ
+        end
+
+        push!(ex_fun.args, :($arg::$typ))
     end
     push!(ex.args, ex_fun)
 
@@ -60,6 +68,7 @@ macro blasfun(expr)
                                      ($(map(eval, types)...),),
                                      $(args...))
         if err != cl.CL_SUCCESS
+            println(STDERR, "Calling function $($(f)) failed!")
             throw(cl.CLError(err))
         end
         return err
