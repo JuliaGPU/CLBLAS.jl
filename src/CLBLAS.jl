@@ -21,7 +21,7 @@ include("L3/L3.jl")
 
 include("highlevel.jl")
 
-LocalMem{T}(::Type{T}, len::Integer) = begin
+function LocalMem{T}(::Type{T}, len::Integer)
     @assert len > 0
     nbytes = sizeof(T) * len
     return LocalMem{T}(convert(Csize_t, nbytes))
@@ -31,11 +31,11 @@ end
 @blasfun clblasSetup()
 
 #destroy
-@blasfun clblasTeardown()
+clblasTeardown() = ccall((:clblasTeardown, libCLBLAS), Void, ())
 
 global compute_context_holder = []
 global next_compute_context = -1
-global setup_called = false
+global clblas_initialized = false
 
 function get_next_compute_context()
     global next_compute_context = next_compute_context + 1
@@ -51,7 +51,7 @@ function supress_context_error(error_info, private_info)
     return C_NULL
 end
 
-function setup(profile=false)
+function setup(profile = false)
     if isempty(cl.platforms())
         throw(cl.OpenCLException("No OpenCL.Platform available"))
     end
@@ -76,29 +76,23 @@ function setup(profile=false)
     if isempty(compute_context_holder)
         throw(cl.OpenCLException("Unable to create any OpenCL.Context, not worked..."))
     end
-    #initializing clblas
-    clblasSetup()
+    return
 end
 
 function teardown()
-    clblasTeardown()
-    release!(compute_context_holder)
+    if clblas_initialized
+        clblasTeardown()
+    end
     global compute_context_holder = []
     global next_compute_context = -1
-    global setup_called = false
-    return nothing
+    global clblas_initialized = false
+    return
 end
 
-function release!(compute_context_holder::Vector{Tuple})
-    for (dev, ctx, queue) in compute_context_holder
-        try
-            finalize(queue)
-            finalize(ctx)
-        catch err
-            println(err)
-            continue
-        end
-    end
+function __init__()
+    clblasSetup()
+    global clblas_initialized = true
+    atexit(teardown)
 end
 
 end # module
