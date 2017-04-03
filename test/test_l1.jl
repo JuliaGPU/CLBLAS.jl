@@ -1,7 +1,6 @@
 @testset "CLBLAS.L1" begin
     @testset "CLBLAS axpy" begin
         for T in testtypes
-            println(T)
             alpha = T(2.0)
             hx = rand(T, 32)
             hy = rand(T, 32)
