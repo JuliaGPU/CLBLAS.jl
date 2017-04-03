@@ -49,10 +49,9 @@ macro blasfun(expr)
     for (arg, typ) in zip(args, types)
         # widen type for numbers (Int32 -> Integer)
         # let ccall handle these conversions!
-        typ = if typ in (:(cl.CL_uint), :Csize_t)
+        T = eval(typ)
+        typ = if T <: Integer
             :Integer
-        elseif typ == :Float32
-            :AbstractFloat
         elseif contains(string(typ), "Ptr") # pointer should be handled by ccall as well
             :Any
         else
@@ -69,6 +68,7 @@ macro blasfun(expr)
                                      ($(map(eval, types)...),),
                                      $(args...))
         if err != cl.CL_SUCCESS
+            println(STDERR, "Calling function $($(f)) failed!")
             throw(cl.CLError(err))
         end
         return err
