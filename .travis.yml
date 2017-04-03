@@ -34,7 +34,7 @@ before_install:
     fi;
 
 script:
-  - julia -e 'Pkg.init(); Pkg.clone(pwd())'
+  - julia -e 'Pkg.init(); Pkg.clone(pwd()); Pkg.build("CLBLAS")'
   - julia -e 'Pkg.checkout("OpenCL");'
   - julia -e 'using CLBLAS; @assert isdefined(:CLBLAS); @assert typeof(CLBLAS) === Module'
   - julia -e 'Pkg.test("CLBLAS")'
