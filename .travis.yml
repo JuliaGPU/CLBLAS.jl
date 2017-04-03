@@ -15,6 +15,9 @@ notifications:
 
 sudo: false
 
+git:
+  depth: 9999999
+
 before_install:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
   - if [ $TRAVIS_OS_NAME = "linux" ]; then
