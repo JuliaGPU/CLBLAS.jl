@@ -32,12 +32,3 @@ before_install:
       tar -xf clBLAS-${CLBLAS}.${PATCH}-Linux-x64.tar.gz;
       export LD_LIBRARY_PATH=${HOME}/build/JuliaGPU/CLBLAS.jl/clBLAS-${CLBLAS}.${PATCH}-Linux-x64/lib64:${LD_LIBRARY_PATH};
     fi;
-
-script:
-  - julia -e 'Pkg.init(); Pkg.clone(pwd()); Pkg.build("CLBLAS")'
-  - julia -e 'Pkg.checkout("OpenCL");'
-  - julia -e 'using CLBLAS; @assert isdefined(:CLBLAS); @assert typeof(CLBLAS) === Module'
-  - julia -e 'Pkg.test("CLBLAS")'
-
-# after_success:
-#   - julia -e 'Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())';
