@@ -1,11 +1,10 @@
-for func in [:clblasStbmv, :clblasDtbmv, :clblasCtbmv, :clblasZtbmv]
+for func in [:clblasStbsv, :clblasDtbsv, :clblasCtbsv, :clblasZtbsv]
 
     @eval @blasfun $func(order::clblasOrder, uplo::clblasUplo,
                               trans::clblasTranspose, diag::clblasDiag,
                               N::Csize_t, K::Csize_t,
                               A::cl.CL_mem, offa::Csize_t, lda::Csize_t,
                               X::cl.CL_mem, offx::Csize_t, incx::Cint,
-                              scratch_buff::cl.CL_mem,
                               n_queues::cl.CL_uint,
                               queues::Ptr{cl.CL_command_queue},
                               n_events_in_wait_list::cl.CL_uint,
@@ -16,7 +15,6 @@ for func in [:clblasStbmv, :clblasDtbmv, :clblasCtbmv, :clblasZtbmv]
                                trans::clblasTranspose, diag::clblasDiag,
                                N::Csize_t, K::Csize_t,
                                A::cl.CL_mem, offa::Csize_t, lda::Csize_t,
-                               X::cl.CL_mem, offx::Csize_t, incx::Cint,
-                               scratch_buff::cl.CL_mem)
+                               X::cl.CL_mem, offx::Csize_t, incx::Cint)
 
 end
