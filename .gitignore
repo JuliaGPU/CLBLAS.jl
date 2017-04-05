@@ -3,3 +3,4 @@
 deps/deps.jl
 deps/downloads
 deps/package
+deps/clBLAS-2.12.0-Linux-x64

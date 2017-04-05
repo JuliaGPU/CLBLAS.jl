@@ -13,7 +13,7 @@ if is_windows()
         provides(
             Binaries, uri,
             libCLBLAS, unpacked_dir = archive,
-            installed_libpath = libpath, os = :Windows
+            installed_libpath = "usr/lib64", os = :Windows
         )
     else
         error("Only 64 bits windows supported with automatic build")
@@ -21,15 +21,18 @@ if is_windows()
 end
 
 if is_linux()
-    provides(AptGet, "libclblas-dev", libCLBLAS)
+
     if Sys.ARCH == :x86_64
+        push!(BinDeps.defaults, Binaries)
         uri = URI(baseurl * "Linux-x64.tar.gz")
+        basedir = joinpath(dirname(@__FILE__), "clBLAS-2.12.0-Linux-x64")
         provides(
             Binaries, uri,
-            libCLBLAS, unpacked_dir = archive,
-            installed_libpath = libpath, os = :Linux
+            libCLBLAS, unpacked_dir = basedir,
+            installed_libpath = joinpath(basedir, "lib64"), os = :Linux
         )
     end
+    provides(AptGet, "libclblas-dev", libCLBLAS)
 end
 if is_apple()
     error("""
