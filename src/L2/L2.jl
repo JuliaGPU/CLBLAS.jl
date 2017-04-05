@@ -17,7 +17,7 @@ include("SPR2.jl")
 include("SYMV.jl")
 include("SYR.jl")
 include("SYR2.jl")
-#include("TBMV.jl") #  duplicating TBSV?
+include("TBMV.jl")
 include("TBSV.jl")
 include("TPMV.jl")
 include("TPSV.jl")
