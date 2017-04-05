@@ -42,3 +42,5 @@ if is_apple()
 end
 
 @BinDeps.install Dict("libCLBLAS" => "libCLBLAS")
+
+is_linux() && Sys.ARCH == :x86_64 && pop!(BinDeps.defaults)
