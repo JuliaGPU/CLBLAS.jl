@@ -34,6 +34,7 @@ if is_linux()
     end
     provides(AptGet, "libclblas-dev", libCLBLAS)
 end
+
 if is_apple()
     error("""
         OSX not oficially supported.
