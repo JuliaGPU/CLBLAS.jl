@@ -1,3 +1,4 @@
 julia 0.5
 OpenCL 0.5
 BinDeps
+@osx Homebrew
