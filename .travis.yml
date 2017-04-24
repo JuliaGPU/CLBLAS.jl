@@ -2,13 +2,11 @@ language: julia
 
 os:
   - linux
+  - osx
 
 julia:
   - 0.5
-
-env:
-  - CLBLAS=2.6 PATCH=0
-  - CLBLAS=2.8 PATCH=0
+  - nightly
 
 notifications:
   email: false
@@ -29,9 +27,4 @@ before_install:
       sh AMD-APP-SDK*.sh --tar -xf -C ${AMDAPPSDK};
       echo libamdocl64.so > ${OPENCL_VENDOR_PATH}/amdocl64.icd;
       export LD_LIBRARY_PATH=${AMDAPPSDK}/lib/x86_64:${LD_LIBRARY_PATH};
-    fi;
-  - if [ $TRAVIS_OS_NAME = "linux" ]; then
-      wget https://github.com/clMathLibraries/clBLAS/releases/download/v${CLBLAS}/clBLAS-${CLBLAS}.${PATCH}-Linux-x64.tar.gz;
-      tar -xf clBLAS-${CLBLAS}.${PATCH}-Linux-x64.tar.gz;
-      export LD_LIBRARY_PATH=${HOME}/build/JuliaGPU/CLBLAS.jl/clBLAS-${CLBLAS}.${PATCH}-Linux-x64/lib64:${LD_LIBRARY_PATH};
     fi;
