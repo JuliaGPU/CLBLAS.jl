@@ -1,22 +1,20 @@
 language: julia
+sudo: false
 
 os:
   - linux
+  - osx
 
 julia:
   - 0.5
-
-env:
-  - CLBLAS=2.6 PATCH=0
-  - CLBLAS=2.8 PATCH=0
+  - 0.6
+  - nightly
+matrix:
+ allow_failures:
+ - julia: nightly
 
 notifications:
   email: false
-
-sudo: false
-
-git:
-  depth: 9999999
 
 before_install:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
@@ -29,9 +27,6 @@ before_install:
       sh AMD-APP-SDK*.sh --tar -xf -C ${AMDAPPSDK};
       echo libamdocl64.so > ${OPENCL_VENDOR_PATH}/amdocl64.icd;
       export LD_LIBRARY_PATH=${AMDAPPSDK}/lib/x86_64:${LD_LIBRARY_PATH};
-    fi;
-  - if [ $TRAVIS_OS_NAME = "linux" ]; then
-      wget https://github.com/clMathLibraries/clBLAS/releases/download/v${CLBLAS}/clBLAS-${CLBLAS}.${PATCH}-Linux-x64.tar.gz;
-      tar -xf clBLAS-${CLBLAS}.${PATCH}-Linux-x64.tar.gz;
-      export LD_LIBRARY_PATH=${HOME}/build/JuliaGPU/CLBLAS.jl/clBLAS-${CLBLAS}.${PATCH}-Linux-x64/lib64:${LD_LIBRARY_PATH};
+      chmod +x ${AMDAPPSDK}/bin/x86_64/clinfo;
+      ${AMDAPPSDK}/bin/x86_64/clinfo;
     fi;

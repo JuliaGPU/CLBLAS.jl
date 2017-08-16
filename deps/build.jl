@@ -36,10 +36,8 @@ if is_linux()
 end
 
 if is_apple()
-    error("""
-        OSX not oficially supported.
-        Find manual build instructions on: https://github.com/clMathLibraries/clBLAS/wiki/Build
-    """)
+    using Homebrew
+    provides(Homebrew.HB, "homebrew/science/clblas", libCLBLAS, os = :Darwin)
 end
 
 @BinDeps.install Dict("libCLBLAS" => "libCLBLAS")
