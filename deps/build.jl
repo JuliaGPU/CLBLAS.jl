@@ -37,7 +37,7 @@ end
 
 if is_apple()
     using Homebrew
-    provides(Homebrew.HB, "homebrew/science/clblas", libCLBLAS, os = :Darwin)
+    provides(Homebrew.HB, "homebrew/core/clblas", libCLBLAS, os = :Darwin)
 end
 
 @BinDeps.install Dict("libCLBLAS" => "libCLBLAS")
