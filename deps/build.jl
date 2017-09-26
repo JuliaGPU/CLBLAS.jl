@@ -27,11 +27,11 @@ if is_linux()
         push!(BinDeps.defaults, Binaries)
         name, ext = splitext(splitext(basename(baseurl * "Linux-x64.tar.gz"))[1])
         uri = URI(baseurl * "Linux-x64.tar.gz")
-        basedir = joinpath(@__DIR__)
+        basedir = joinpath(@__DIR__, name)
         provides(
             Binaries, uri,
             libCLBLAS, unpacked_dir = basedir,
-            installed_libpath = joinpath(basedir, name, "lib64"), os = :Linux
+            installed_libpath = joinpath(basedir, "lib64"), os = :Linux
         )
     end
     # provides(AptGet, "libclblas-dev", libCLBLAS)
