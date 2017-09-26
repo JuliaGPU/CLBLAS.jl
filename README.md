@@ -12,6 +12,11 @@ CLBLAS.jl
 
 AMD clBLAS bindings for Julia.
 
+## Installation notes
+
+if the download of the binary fails on linux, you may also try to install clblas with `sudo apt-get install libclblas-dev` 
+and then rerun `Pkg.build("CLBLAS")`.
+
 ## Current status
 
  * Low-level bindings
