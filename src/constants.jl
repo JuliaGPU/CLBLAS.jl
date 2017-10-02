@@ -1,7 +1,7 @@
 import OpenCL.cl
 
-typealias CL_float2 Complex64
-typealias CL_double2 Complex128
+const CL_float2 = Complex64
+const CL_double2 = Complex128
 
 
 clblasInvalidCommandQueue             = cl.CL_INVALID_COMMAND_QUEUE
@@ -38,4 +38,3 @@ clblasInsufficientMemVecY             = -1007
 @enum clblasUplo clblasUpper clblasLower
 @enum clblasDiag clblasUnit clblasNonUnit
 @enum clblasSide clblasLeft clblasRight
-
