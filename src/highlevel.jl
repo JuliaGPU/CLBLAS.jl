@@ -50,6 +50,20 @@ end
 
 ########################### L3 functions ###############################
 
+
+blas_size(t::Char, M) = UInt64(size(M, t=='N' ? 1 : 2), size(M, t=='N' ? 2 : 1))
+
+
+function _stride(a, i::Integer)
+    if i > ndims(a)
+        return length(a)
+    end
+    s = 1
+    for n = 1:(i-1)
+        s *= size(a, n)
+    end
+    return UInt64(s)
+end
 ## GEMM
 for (func, typ) in [(:clblasSgemm, Float32), (:clblasDgemm, Float64),
                     (:clblasCgemm, CL_float2), (:clblasZgemm, CL_double2)]
@@ -58,14 +72,17 @@ for (func, typ) in [(:clblasSgemm, Float32), (:clblasDgemm, Float64),
                          alpha::$typ, A::CLArray{$typ,2}, B::CLArray{$typ,2},
                          beta::$typ, C::CLArray{$typ,2};
                          queue=cl.queue(A))
-        M = UInt64(size(A)[1])
-        N = UInt64(size(B)[2])
-        K = UInt64(size(A)[2])
-        return $func(clblasColumnMajor, transval(tA), transval(tB), M, N, K,
-              alpha, cl.pointer(A), UInt(0), M, cl.pointer(B), UInt(0), K,
-              beta, cl.pointer(C), UInt(0), M, [queue])
-    end
 
+        M = UInt64(size(A, tA == 'N' ? 1 : 2))
+        K = UInt64(size(A, tA == 'N' ? 2 : 1))
+        N = UInt64(size(B, tB == 'N' ? 2 : 1))
+        lda = max(1, _stride(A, 2))
+        ldb = max(1, _stride(B, 2))
+        ldc = max(1, _stride(C, 2))
+        return $func(clblasColumnMajor, transval(tA), transval(tB), M, N, K,
+              alpha, cl.pointer(A), UInt(0), lda, cl.pointer(B), UInt(0), ldb,
+              beta, cl.pointer(C), UInt(0), ldc, [queue])
+    end
 end
 
 
@@ -75,19 +92,22 @@ for (func, typ) in (
     )
     @eval begin
         function gemv!(
-                trans::Char, alpha::($typ), A::CLArray{$typ, 2},
+                tA::Char, alpha::($typ), A::CLArray{$typ, 2},
                 X::CLArray{$typ, 1}, beta::($typ), Y::CLArray{$typ, 1}
             )
             event = Ref{cl.CL_event}()
-            M, N = size(A, 1), size(A, 2)
+            M, N = UInt64.(size(A))
+            lda = max(1, _stride(A, 2))
+            incx = _stride(X, 1)
+            incy = _stride(Y, 1)
             $func(
-                clblasColumnMajor, transval(trans),
+                clblasColumnMajor, transval(tA),
                 M, N,
                 alpha,
-                cl.pointer(A), 0, M,
-                cl.pointer(X), 0, 1,
+                cl.pointer(A), 0, lda,
+                cl.pointer(X), 0, incx,
                 beta,
-                cl.pointer(Y), 0, 1,
+                cl.pointer(Y), 0, incy,
                 1, Base.RefValue(A.queue.id),
                 0, C_NULL, # event_wait_list
                 event
