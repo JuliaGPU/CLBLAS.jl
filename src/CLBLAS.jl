@@ -3,7 +3,7 @@ module CLBLAS
 
 using OpenCL: cl
 
-export axpy!, scal!, gemm!, gemv!
+export axpy!, scal!, gemm!, gemv!, gbmv!
 
 # why there is a type assertion at context.jl line 38
 depsfile = joinpath(dirname(@__FILE__), "..", "deps", "deps.jl")
