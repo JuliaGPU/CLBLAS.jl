@@ -1,6 +1,6 @@
 
 import OpenCL.cl.CLArray
-import Base.LinAlg.BLAS: axpy!, scal!, gemm!, gemv!
+import Base.LinAlg.BLAS: axpy!, scal!, gemm!, gemv!, gbmv!
 
 #### common stuff
 
@@ -103,6 +103,41 @@ for (func, typ) in (
             $func(
                 clblasColumnMajor, transval(tA),
                 M, N,
+                alpha,
+                cl.pointer(A), 0, lda,
+                cl.pointer(X), 0, incx,
+                beta,
+                cl.pointer(Y), 0, incy,
+                1, Base.RefValue(A.queue.id),
+                0, C_NULL, # event_wait_list
+                event
+            )
+            cl.Event(event[], retain = false)
+        end
+    end
+end
+
+
+for (func, typ) in (
+        (:clblasSgbmv, Float32), (:clblasDgbmv, Float64),
+        (:clblasCgbmv, CL_float2), (:clblasZgbmv, CL_double2)
+    )
+    @eval begin
+        function gbmv!(
+                tA::Char, m::Int, kl::Int, ku::Int, alpha::($typ), A::CLArray{$typ, 2},
+                X::CLArray{$typ, 1}, beta::($typ), Y::CLArray{$typ, 1}
+            )
+            event = Ref{cl.CL_event}()
+            N = UInt64(size(A,2))
+            M = UInt64(m)
+            KL = UInt64(kl)
+            KU = UInt64(ku)
+            lda = max(1, _stride(A, 2))
+            incx = _stride(X, 1)
+            incy = _stride(Y, 1)
+            $func(
+                clblasColumnMajor, transval(tA),
+                M, N, KL, KU,
                 alpha,
                 cl.pointer(A), 0, lda,
                 cl.pointer(X), 0, incx,
