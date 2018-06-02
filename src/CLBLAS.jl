@@ -22,7 +22,7 @@ include("L3/L3.jl")
 
 include("highlevel.jl")
 
-function LocalMem{T}(::Type{T}, len::Integer)
+function LocalMem(::Type{T}, len::Integer) where T
     @assert len > 0
     nbytes = sizeof(T) * len
     return LocalMem{T}(convert(Csize_t, nbytes))

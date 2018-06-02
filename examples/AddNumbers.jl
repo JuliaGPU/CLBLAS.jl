@@ -25,7 +25,7 @@ p = cl.Program(ctx, source=addNumbersSource) |> cl.build!
 const KERNEL_FUNC = "add_numbers"
 addNumbersKernel = cl.Kernel(p, KERNEL_FUNC)
 
-LocalMem{T}(::Type{T}, len::Integer) = begin
+LocalMem(::Type{T}, len::Integer) where {T} = begin
     @assert len > 0
     nbytes = sizeof(T) * len
     return LocalMem{T}(convert(Csize_t, nbytes))
