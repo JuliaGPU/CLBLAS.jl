@@ -33,27 +33,3 @@ test:v0.6:
 
 
 ## post-processing
-
-coverage:
-  stage: postprocess
-  image: juliagpu/julia:v0.6
-  dependencies:
-    - test:v0.6
-  script:
-    - julia -e 'Pkg.add("Coverage")'
-    - julia -e 'using Coverage;
-                cl, tl = get_summary(process_folder());
-                println("(", cl/tl*100, "%) covered");
-                Codecov.submit_local(process_folder(), ".")'
-  coverage: '/\(\d+.\d+\%\) covered/'
-  allow_failure: true
-
-documentation:
-  stage: postprocess
-  image: juliagpu/julia:v0.6
-  dependencies:
-    - test:v0.6
-  script:
-    - julia -e 'Pkg.add("Documenter")'
-    - julia docs/make.jl
-allow_failure: true
