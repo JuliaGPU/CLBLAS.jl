@@ -9,7 +9,6 @@ stages:
   - test
   - postprocess
 
-
 ## testing
 
 .test_template: &pkg2_test_template
