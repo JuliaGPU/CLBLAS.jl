@@ -4,9 +4,8 @@ variables:
 
 .test_template: &test_definition
   before_script:
-    - apt-get -qq update && apt-get -qq install -y libclblas-dev libclfft-dev
+    - apt-get -qq update && apt-get -qq install -y libclblas-dev
     - apt-get install --reinstall -y ca-certificates
-    - apt-get install --reinstall -y openssl
 
   script:
     - julia -e 'versioninfo()'
@@ -19,4 +18,4 @@ variables:
   
 test:0.6:
   image: juliagpu/julia:v0.6-opencl
-<<: *test_definition
+  <<: *test_definition
