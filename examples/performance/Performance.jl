@@ -5,8 +5,8 @@ const clblas = CLBLAS
 
 const COUNT = int(ARGS[1])
 
-function seq_mat_mul_sdot{T}(Mdim::Int, Ndim::Int, Pdim::Int,
-                             A::Array{T}, B::Array{T}, C::Array{T})
+function seq_mat_mul_sdot(Mdim::Int, Ndim::Int, Pdim::Int,
+                          A::Array{T}, B::Array{T}, C::Array{T}) where T
     for i in 1:Ndim
         for j in 1:Mdim
             tmp = zero(Float32)
