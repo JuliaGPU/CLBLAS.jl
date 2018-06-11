@@ -1,8 +1,6 @@
 CLBLAS.jl
 ============
 
-*Support for compiling and executing native Julia kernels on CUDA hardware.*
-
 **Build status**: [![][gitlab-img]][gitlab-url]
 
 [gitlab-img]: https://gitlab.com/JuliaGPU/CLBLAS.jl/badges/master/pipeline.svg
