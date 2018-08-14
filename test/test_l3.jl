@@ -1,4 +1,4 @@
-@testset "CLBLAS.L1" begin
+@testset "CLBLAS.L3" begin
     @testset "CLBLAS gemm" begin
         for T in testtypes
             alpha = T(2.0)
