@@ -32,4 +32,37 @@
             @test cl.to_host(DX) ≈ hDX
         end
     end
+
+    @testset "CLBLAS dot" begin
+        for T in [Float32, Float64]
+
+            n = 32
+            x = rand(T, n)
+            y = rand(T, n)
+            x_cl = CLArray(q, x)
+            y_cl = CLArray(q, y)
+            incx = 1
+            incy = 1
+
+            res_true = dot(x, y)
+            res_cl = dot(n, x_cl, incx, y_cl, incy, queue=q)
+
+            @test res_cl ≈ res_true
+        end
+    end
+
+    @testset "CLBLAS nrm2" begin
+        for T in [Float32, Float64]
+
+            n = 32
+            x = rand(T, n)
+            x_cl = CLArray(q, x)
+            incx = 1
+
+            res_true = norm(x)
+            res_cl = CLBLAS.nrm2(n, x_cl, incx, queue=q)
+
+            @test res_cl ≈ res_true
+        end
+    end
 end

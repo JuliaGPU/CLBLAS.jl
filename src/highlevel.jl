@@ -1,6 +1,6 @@
 
 import OpenCL.cl.CLArray
-import Base.LinAlg.BLAS: axpy!, scal!, gemm!, gemv!, gbmv!
+import Base.LinAlg.BLAS: axpy!, scal!, gemm!, gemv!, gbmv!, dot, nrm2
 
 #### common stuff
 
@@ -38,6 +38,65 @@ for (func, typ) in [(:clblasSscal, Float32), (:clblasDscal, Float64),
         return $func(Csize_t(n), DA,
                      pointer(DX), Csize_t(0), Cint(incx),
                      [queue])
+    end
+
+end
+
+## DOT
+for (func, typ) in [(:clblasSdot, Float32), (:clblasDdot, Float64)]
+
+    @eval function dot(n::Integer,
+                       x::CLArray{$typ}, incx::Integer,
+                       y::CLArray{$typ}, incy::Integer;
+                       queue = cl.queue(x))
+        n = length(x)
+        @assert n == length(y) "x and y have different sizes"
+
+        # output and scratch buffer
+        ctx = cl.context(queue)
+        out = zeros($typ, 1)
+        out_buffer = cl.Buffer($typ, ctx, (:rw, :copy), hostbuf=out)
+        scratch_buffer = cl.Buffer($typ, ctx, :rw, 2n)
+
+        event = $func(Csize_t(n),
+            pointer(out_buffer), Csize_t(0),
+            pointer(x), Csize_t(0), Cint(incx),
+            pointer(y), Csize_t(0), Cint(incy),
+            pointer(scratch_buffer), [queue])
+
+        # wait for kernel and read return value
+        cl.wait(event)
+        cl.enqueue_read_buffer(queue, out_buffer, out, Csize_t(0), nothing, true)
+
+        return first(out)
+    end
+
+end
+
+## NRM2
+for (func, typ) in [(:clblasSnrm2, Float32), (:clblasDnrm2, Float64)]
+
+    @eval function nrm2(n::Integer,
+                        x::CLArray{$typ}, incx::Integer;
+                        queue = cl.queue(x))
+        n = length(x)
+
+        # output and scratch buffer
+        ctx = cl.context(queue)
+        out = zeros($typ, 1)
+        out_buffer = cl.Buffer($typ, ctx, (:rw, :copy), hostbuf=out)
+        scratch_buffer = cl.Buffer($typ, ctx, :rw, 2n)
+
+        event = $func(Csize_t(n),
+            pointer(out_buffer), Csize_t(0),
+            pointer(x), Csize_t(0), Cint(incx),
+            pointer(scratch_buffer), [queue])
+
+        # wait for kernel and read return value
+        cl.wait(event)
+        cl.enqueue_read_buffer(queue, out_buffer, out, Csize_t(0), nothing, true)
+
+        return first(out)
     end
 
 end
